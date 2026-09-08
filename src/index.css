@@ -1,0 +1,266 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/* ==========================================================================
+   SMART-Rail — "Mission Engineering" design system
+   Tokens transcribed from /design-reference/design.md.
+   Where design.md's frontmatter palette and its prose palette disagree, the
+   prose palette wins, because that is what the Stitch mockups render.
+   ========================================================================== */
+
+@theme {
+  /* --- Environmental & structural surfaces ------------------------------ */
+  --color-canvas: #f2efe7; /* Environment Base — app bedrock (Level 0)   */
+  --color-surface: #ffffff; /* Surface Elevation — tiles, grids (Level 1) */
+  --color-surface-wash: #f8f6f1; /* Table row hover                      */
+  --color-surface-sunken: #ebe8e0; /* Inset wells, unit badges           */
+  --color-line: #e5e0d5; /* Structural Borders — 1px partitions          */
+  --color-line-strong: rgba(37, 37, 37, 0.12);
+  --color-line-elevated: rgba(37, 37, 37, 0.16);
+
+  /* --- Typography & structure ------------------------------------------ */
+  --color-ink: #252525; /* Charcoal Solid — primary ink                   */
+  --color-ink-muted: #615d56; /* Muted Ink — labels, column headers       */
+  --color-ink-subtle: #8c867d; /* Subtle Ink — ghost lines, disabled      */
+
+  /* --- Functional accent & AI engine ----------------------------------- */
+  --color-accent: #f2b759; /* Khaki Orange — commitment & intelligence    */
+  --color-accent-hover: #e0a340;
+  --color-accent-wash: #fdf6e9;
+  --color-accent-line: #e3c99a;
+  --color-accent-deep: #6c4800; /* on-primary-container, for amber-on-amber */
+
+  /* --- Telemetry & safety status ---------------------------------------- */
+  --color-urgent: #d9383a;
+  --color-urgent-tint: #fce8e8;
+  --color-urgent-line: #f3b2b3;
+  --color-warning: #d9822b;
+  --color-warning-tint: #fdf1e2;
+  --color-warning-line: #f7cd9f;
+  --color-nominal: #2e7d32;
+  --color-nominal-tint: #eaf3eb;
+  --color-nominal-line: #a5d2a8;
+  --color-telemetry: #1976d2;
+  --color-telemetry-tint: #e8f1fb;
+  --color-telemetry-line: #a9cbec;
+
+  /* --- Navigation spine ------------------------------------------------- */
+  /* 5 of 6 app mockups render the spine as a saturated khaki field. */
+  --color-spine: #f2b759;
+  --color-spine-hover: #eeae44;
+  --color-spine-line: rgba(37, 37, 37, 0.14);
+
+  /* --- Typeface --------------------------------------------------------- */
+  /* design.md mandates a single typeface globally. The mono stack is used
+     only for reference codes and clock values, matching the mockups. */
+  --font-sans: 'Inter Variable', Inter, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Mono', 'SF Mono', Consolas, monospace;
+
+  /* --- Type scale ------------------------------------------------------- */
+  /* Calibrated for scanning at arm's length on a control-room display:
+     one dominant page title, loud metrics, readable body, quiet metadata.
+     Fewer words, larger important information. */
+
+  /* Page titles and headline KPI values */
+  --text-display-lg: 2.25rem; /* 36px */
+  --text-display-lg--line-height: 2.75rem;
+  --text-display-lg--letter-spacing: -0.022em;
+  --text-display-lg--font-weight: 700;
+
+  /* Major section headings */
+  --text-headline-lg: 1.625rem; /* 26px */
+  --text-headline-lg--line-height: 2.125rem;
+  --text-headline-lg--letter-spacing: -0.018em;
+  --text-headline-lg--font-weight: 600;
+
+  /* Panel titles */
+  --text-headline-md: 1.3125rem; /* 21px */
+  --text-headline-md--line-height: 1.75rem;
+  --text-headline-md--letter-spacing: -0.012em;
+  --text-headline-md--font-weight: 600;
+
+  --text-headline-sm: 1.0625rem; /* 17px */
+  --text-headline-sm--line-height: 1.5rem;
+  --text-headline-sm--letter-spacing: -0.006em;
+  --text-headline-sm--font-weight: 600;
+
+  /* Emphasised body — lead lines, subtitles, task names */
+  --text-body-lg: 1rem; /* 16px */
+  --text-body-lg--line-height: 1.5rem;
+
+  /* Default body — the workhorse size across tables and panels */
+  --text-body-md: 0.875rem; /* 14px */
+  --text-body-md--line-height: 1.3125rem;
+
+  /* Secondary metadata */
+  --text-body-sm: 0.8125rem; /* 13px */
+  --text-body-sm--line-height: 1.125rem;
+  --text-body-sm--letter-spacing: 0.005em;
+
+  --text-label-md: 0.8125rem; /* 13px */
+  --text-label-md--line-height: 1.125rem;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 600;
+
+  /* Micro labels — uppercase, tracked out for fast skimming */
+  --text-label-sm: 0.75rem; /* 12px */
+  --text-label-sm--line-height: 1rem;
+  --text-label-sm--letter-spacing: 0.04em;
+  --text-label-sm--font-weight: 600;
+
+  /* Tabular data cells, clock values, reference codes */
+  --text-code-dense: 0.8125rem; /* 13px */
+  --text-code-dense--line-height: 1.125rem;
+  --text-code-dense--letter-spacing: 0.01em;
+  --text-code-dense--font-weight: 500;
+
+  /* --- Shapes ----------------------------------------------------------- */
+  /* Base components 4px, containers 6–8px. Pill shapes are prohibited. */
+  --radius-sm: 0.125rem; /* 2px — checkboxes                              */
+  --radius: 0.25rem; /* 4px — inputs, buttons, badges, tabs               */
+  --radius-md: 0.375rem; /* 6px — panels, cards, tables                   */
+  --radius-lg: 0.5rem; /* 8px — dialogs                                   */
+  --radius-xl: 0.75rem;
+
+  /* --- Elevation -------------------------------------------------------- */
+  /* Level 1 rests flat. Only Level 2 (modals, flyouts) casts a shadow. */
+  --shadow-level2:
+    0 4px 12px rgba(37, 37, 37, 0.08), 0 1px 2px rgba(37, 37, 37, 0.06);
+
+  /* --- Layout ----------------------------------------------------------- */
+  --spacing-spine: 15rem; /* 240px expanded navigation spine              */
+  --spacing-spine-rail: 4rem; /* 64px collapsed                          */
+  --spacing-header: 3rem; /* 48px operational utility header             */
+
+  /* --- Motion ----------------------------------------------------------- */
+  /* "RailNet Intelligence Engine · Orbit Revolution Cycle 55s" — the
+     decision-support graph rotates its evaluator ring once per 55s. */
+  --animate-orbit: orbit 55s linear infinite;
+  --animate-orbit-counter: orbit-counter 55s linear infinite;
+
+  @keyframes orbit {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes orbit-counter {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body-md);
+    line-height: 1.3125rem;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Tabular numerals are mandated for every timestamp, milepost, track ID,
+     speed limit, train number and telemetry counter so that columns do not
+     jitter during live data feeds. Applied globally, since this interface is
+     numeric almost everywhere. */
+  body,
+  input,
+  button,
+  select,
+  textarea {
+    font-feature-settings: 'tnum' 1, 'cv05' 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  figure {
+    margin: 0;
+  }
+
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* Acute focus boundaries, never diffuse. */
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+  }
+}
+
+@utility font-dense {
+  /* design.md `code-dense`: Inter, tracked out, tabular. For data cells. */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'cv05' 1;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+
+@utility scrollbar-industrial {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-subtle) transparent;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-line);
+    border-radius: 0;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: var(--color-ink-subtle);
+  }
+}
+
+/* Dashed "available window" region used across planning timelines. */
+@utility window-hatch {
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgba(242, 183, 89, 0.18) 0px,
+    rgba(242, 183, 89, 0.18) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+}
+
+/* Faint engineering graticule for schematic and hero canvases. */
+@utility graticule {
+  background-image:
+    linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
