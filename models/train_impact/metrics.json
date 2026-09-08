@@ -1,0 +1,6 @@
+{
+  "model_name": "LinearRegression (Baseline)",
+  "mae": 2.31,
+  "rmse": 2.95,
+  "r2_score": 0.8688
+}

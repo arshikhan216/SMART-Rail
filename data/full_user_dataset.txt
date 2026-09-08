@@ -1,0 +1,1598 @@
+<USER_REQUEST>
+You are a senior Machine Learning Engineer, Backend Engineer, Railway Operations Optimization Engineer, and Operations Research specialist.
+
+I am developing the project:
+
+"AI-Powered Automatic Block Planning to Maximize Asset Availability for Train Operations on Indian Railways"
+
+The objective is to transform decentralized and manual railway maintenance-block planning into an integrated, data-driven, AI-assisted planning system.
+
+IMPORTANT:
+This prompt is ONLY for developing the ML + optimization backend.
+Do NOT build the frontend/UI at this stage.
+
+============================================================
+1. PROBLEM CONTEXT
+============================================================
+
+Indian Railways has maintenance activities across multiple departments:
+
+1. Engineering
+2. Signal & Telecommunication (S&T)
+3. Traction Distribution
+
+Maintenance information is maintained independently in systems conceptually represented as:
+
+- TMS → Track/Engineering maintenance and defects
+- SMMS → Signalling maintenance
+- TDMS → Traction Distribution maintenance
+- COA → Corridor/block availability
+- Train timetable and goods/freight train forecast
+
+The current process is decentralized and manual.
+
+This causes:
+
+- Poor coordination between departments
+- Inefficient use of maintenance blocks
+- Duplicate infrastructure downtime
+- Poor utilization of available block windows
+- Maintenance delays
+- Increased asset downtime
+- Potential train disruption
+- Reduced infrastructure availability
+
+The proposed system must integrate these data sources and automatically generate optimized maintenance block plans.
+
+============================================================
+2. CORE OBJECTIVE
+============================================================
+
+Build a modular ML backend that performs:
+
+DATA
+  ↓
+DATA INTEGRATION
+  ↓
+ASSET CONDITION/RISK PREDICTION
+  ↓
+MAINTENANCE PRIORITIZATION
+  ↓
+TRAIN IMPACT ANALYSIS
+  ↓
+BLOCK CANDIDATE GENERATION
+  ↓
+MULTI-DEPARTMENT COORDINATION
+  ↓
+CONSTRAINT OPTIMIZATION
+  ↓
+DAILY/WEEKLY/MONTHLY BLOCK PLAN
+  ↓
+EVALUATION + EXPLANATION
+
+The final backend must be modular, testable, explainable, and capable of being connected to a FastAPI service later.
+
+============================================================
+3. VERY IMPORTANT ARCHITECTURAL PRINCIPLE
+============================================================
+
+DO NOT treat this as a single machine-learning problem.
+
+This is a HYBRID AI + OPERATIONS RESEARCH system.
+
+Use ML for:
+
+- Asset failure/risk prediction
+- Condition prediction
+- Maintenance priority/risk scoring
+- Optional train delay/impact prediction
+
+Use deterministic algorithms and constraint optimization for:
+
+- Block feasibility
+- Train-block conflicts
+- Resource constraints
+- Maintenance duration
+- Multi-department coordination
+- Block assignment
+- Weekly/monthly scheduling
+
+Recommended technologies:
+
+Python
+Pandas
+NumPy
+Scikit-learn
+Joblib
+Google OR-Tools CP-SAT
+FastAPI
+Pydantic
+Pytest
+
+Optional:
+
+XGBoost/LightGBM
+SHAP
+MLflow
+
+Do NOT introduce deep learning or reinforcement learning unless there is a clear technical reason.
+
+============================================================
+4. PROJECT STRUCTURE
+============================================================
+
+Create the backend with this structure:
+
+ai_rail_block_planner/
+│
+├── data/
+│   ├── raw/
+│   ├── processed/
+│   └── synthetic/
+│
+├── models/
+│
+├── src/
+│   │
+│   ├── config.py
+│   ├── schemas.py
+│   ├── exceptions.py
+│   │
+│   ├── data_pipeline/
+│   │   ├── loaders.py
+│   │   ├── validators.py
+│   │   ├── preprocessing.py
+│   │   └── integration.py
+│   │
+│   ├── risk_engine/
+│   │   ├── feature_engineering.py
+│   │   ├── train.py
+│   │   ├── predict.py
+│   │   └── explain.py
+│   │
+│   ├── priority_engine/
+│   │   └── priority.py
+│   │
+│   ├── train_impact/
+│   │   ├── conflict_detector.py
+│   │   ├── feature_engineering.py
+│   │   ├── train.py
+│   │   └── predict.py
+│   │
+│   ├── block_planner/
+│   │   ├── candidates.py
+│   │   ├── constraints.py
+│   │   ├── optimizer.py
+│   │   └── objective.py
+│   │
+│   ├── coordination/
+│   │   └── coordinator.py
+│   │
+│   ├── planning/
+│   │   ├── daily.py
+│   │   ├── weekly.py
+│   │   └── monthly.py
+│   │
+│   └── evaluation/
+│       ├── metrics.py
+│       ├── baseline.py
+│       └── report.py
+│
+├── tests/
+│
+├── scripts/
+│   ├── generate_data.py
+│   ├── train_all.py
+│   └── run_pipeline.py
+│
+├── main.py
+├── requirements.txt
+├── .env.example
+└── README.md
+
+============================================================
+5. CHUNK 1 — DATA MODEL
+============================================================
+
+Create strongly typed Pydantic/dataclass models for:
+
+Asset
+Defect
+MaintenanceTask
+Train
+TrainMovement
+BlockWindow
+Resource
+Department
+MaintenanceHistory
+WeatherRecord
+ScheduleAssignment
+OptimizationResult
+
+Asset fields should include at minimum:
+
+asset_id
+asset_type
+department
+section_id
+location
+criticality
+installation_date
+age_years
+condition_score
+traffic_load
+last_maintenance_date
+
+Defect:
+
+defect_id
+asset_id
+section_id
+defect_type
+severity
+detected_date
+status
+overdue_days
+
+MaintenanceTask:
+
+task_id
+asset_id
+section_id
+department
+maintenance_type
+duration_hours
+severity
+urgency
+deadline
+required_workers
+required_machine
+priority_score
+
+Train:
+
+train_id
+train_number
+train_type
+priority
+source
+destination
+
+TrainMovement:
+
+train_id
+section_id
+arrival_time
+departure_time
+direction
+
+BlockWindow:
+
+block_id
+section_id
+date
+start_time
+end_time
+available
+
+Resource:
+
+resource_id
+department
+resource_type
+capacity
+available_from
+available_until
+
+============================================================
+6. CHUNK 2 — DATA INTEGRATION
+============================================================
+
+Build a unified data ingestion layer.
+
+It must be capable of reading:
+
+CSV
+JSON
+Parquet
+
+Do not assume that actual TMS/SMMS/TDMS/COA APIs are available.
+
+Create adapter interfaces so future APIs can be connected without rewriting the ML system.
+
+Example:
+
+BaseDataSource
+TMSAdapter
+SMMSAdapter
+TDMSAdapter
+COAAdapter
+TimetableAdapter
+
+For the prototype, provide CSV adapters.
+
+The unified pipeline should produce standardized tables:
+
+assets
+defects
+maintenance_tasks
+trains
+train_movements
+block_windows
+resources
+maintenance_history
+
+Implement:
+
+- schema validation
+- missing-value handling
+- duplicate detection
+- date/time normalization
+- ID validation
+- section validation
+- categorical encoding
+- numerical scaling where required
+
+Never silently discard invalid data.
+
+Log validation errors.
+
+============================================================
+7. CHUNK 3 — SYNTHETIC DATA GENERATOR
+============================================================
+
+Because real TMS/SMMS/TDMS/COA operational data is not publicly available as one unified dataset, create a realistic synthetic generator.
+
+Generate:
+
+- railway sections
+- assets
+- defects
+- maintenance history
+- maintenance requests
+- trains
+- train movements
+- block windows
+- resources
+- weather
+
+The synthetic generator must create realistic relationships.
+
+Examples:
+
+Higher asset age
+→ generally higher risk
+
+Lower condition score
+→ higher risk
+
+Higher traffic load
+→ higher deterioration risk
+
+Higher criticality
+→ higher maintenance priority
+
+Higher defect severity
+→ higher urgency
+
+More departments operating on the same section
+→ greater opportunity for coordinated maintenance
+
+High train density
+→ higher block impact
+
+Do NOT generate completely independent random columns.
+
+Use correlated/domain-informed distributions.
+
+Set a reproducible random seed.
+
+============================================================
+8. CHUNK 4 — ASSET RISK ML MODEL
+============================================================
+
+Build the first ML engine.
+
+Goal:
+
+Predict:
+
+risk_probability
+
+and optionally:
+
+failure_risk_class
+
+Features should include:
+
+condition_score
+age_years
+traffic_load
+criticality
+defect_count
+max_defect_severity
+overdue_days
+days_since_maintenance
+
+Start with:
+
+RandomForestClassifier
+
+Also implement a simple baseline:
+
+LogisticRegression
+
+Compare the two.
+
+Use:
+
+train/validation/test split
+
+or stratified cross-validation where appropriate.
+
+Metrics:
+
+ROC-AUC
+PR-AUC
+Precision
+Recall
+F1
+Confusion Matrix
+Calibration/Brier score where appropriate
+
+Do not use accuracy as the only metric.
+
+Address class imbalance.
+
+Save:
+
+model
+feature list
+preprocessing pipeline
+model metadata
+training metrics
+
+Use Joblib.
+
+Never train the model inside the API request.
+
+============================================================
+9. CHUNK 5 — RISK EXPLANATION
+============================================================
+
+The system must explain why an asset received a high risk score.
+
+For every prediction provide:
+
+asset_id
+risk_probability
+risk_level
+top contributing factors
+
+For example:
+
+Asset A-1024
+
+Risk = 0.91
+Level = CRITICAL
+
+Reasons:
+
+- Low condition score
+- High traffic load
+- Severe unresolved defect
+- Maintenance overdue by 37 days
+
+Prefer model-independent explanations first.
+
+If SHAP is added, make it optional.
+
+Do not make SHAP a hard dependency.
+
+============================================================
+10. CHUNK 6 — MAINTENANCE PRIORITY ENGINE
+============================================================
+
+Convert ML outputs into maintenance priority.
+
+Priority must NOT equal ML probability alone.
+
+Use a transparent scoring function based on:
+
+risk
+criticality
+defect severity
+urgency
+overdue days
+asset availability impact
+maintenance deadline
+train operational impact
+
+Create a normalized:
+
+priority_score: 0–100
+
+Then classify:
+
+LOW
+MODERATE
+HIGH
+VERY_HIGH
+CRITICAL
+
+Make the weights configurable.
+
+Example:
+
+risk = 40%
+criticality = 25%
+severity = 20%
+urgency = 15%
+
+Do not hard-code these weights throughout the code.
+
+Put them in configuration.
+
+============================================================
+11. CHUNK 7 — TRAIN IMPACT ENGINE
+============================================================
+
+First implement a deterministic train-block conflict detector.
+
+Given:
+
+section
+block start
+block end
+
+return:
+
+number of conflicting trains
+high-priority conflicting trains
+freight trains affected
+passenger trains affected
+total affected train movements
+
+Implement interval-overlap correctly.
+
+Handle:
+
+- crossing midnight
+- multiple movements
+- multiple sections
+- train priority
+- direction where relevant
+
+Create an impact score.
+
+Example conceptual formula:
+
+impact =
+passenger_weight * passenger_conflicts
++
+freight_weight * freight_conflicts
++
+priority_weight * high_priority_conflicts
+
+Make weights configurable.
+
+============================================================
+12. CHUNK 8 — OPTIONAL TRAIN IMPACT ML
+============================================================
+
+Only after deterministic conflict analysis works.
+
+If enough historical data exists, build a model to predict:
+
+expected_delay_minutes
+
+or
+
+expected_disruption_score
+
+Potential features:
+
+train_type
+section
+time_of_day
+day_of_week
+historical_delay
+traffic_density
+number_of_blocked_sections
+weather
+block_duration
+
+Start with:
+
+RandomForestRegressor
+
+Compare against:
+
+LinearRegression
+
+Metrics:
+
+MAE
+RMSE
+R²
+
+Do NOT allow this model to override hard safety constraints.
+
+Predicted impact can be a soft optimization penalty.
+
+============================================================
+13. CHUNK 9 — BLOCK CANDIDATE GENERATION
+============================================================
+
+Generate feasible task-block combinations.
+
+A maintenance task can only be assigned to a block if:
+
+same section
+block duration >= task duration
+block is available
+required resources can potentially be available
+deadline is respected
+safety requirements are satisfied
+
+Do this before calling the optimizer.
+
+Create:
+
+CandidateAssignment
+
+with:
+
+task_id
+block_id
+section_id
+feasible
+reason_if_infeasible
+train_impact
+resource_feasible
+duration_feasible
+
+Never hide infeasible candidates.
+
+Provide diagnostic reasons.
+
+============================================================
+14. CHUNK 10 — MULTI-DEPARTMENT COORDINATION
+============================================================
+
+This is one of the main innovations.
+
+Detect tasks that can potentially be performed during the same block.
+
+Example:
+
+Section SEC-001
+
+Engineering:
+Track tamping — 2h
+
+S&T:
+Signal inspection — 1h
+
+Traction:
+OHE inspection — 1h
+
+Instead of:
+
+2h + 1h + 1h separate possessions
+
+try to coordinate them into one possession where technically and operationally safe.
+
+Create a compatibility engine.
+
+Two tasks can be coordinated only if:
+
+same section
+compatible time
+compatible resource requirements
+no safety conflict
+no mutually exclusive work type
+combined duration fits the block
+required departments can work simultaneously
+
+Never assume tasks are compatible merely because they share a section.
+
+Make compatibility rules explicit and configurable.
+
+============================================================
+15. CHUNK 11 — CORE OPTIMIZATION
+============================================================
+
+Use:
+
+Google OR-Tools CP-SAT
+
+as the primary optimizer.
+
+Decision variable:
+
+x(task, block) ∈ {0,1}
+
+Meaning:
+
+1 = task is assigned to block
+0 = task is not assigned
+
+Core constraints:
+
+1. A task can be assigned at most once.
+
+2. A task can only be assigned to a feasible block.
+
+3. Block duration cannot be exceeded.
+
+4. Resource capacity cannot be exceeded.
+
+5. Conflicting train movements must be respected.
+
+6. Department/resource constraints must be respected.
+
+7. Maintenance deadlines should be respected.
+
+8. Safety constraints are HARD constraints.
+
+9. Critical maintenance should receive strong priority.
+
+10. Same-block coordination should receive positive benefit.
+
+============================================================
+16. CHUNK 12 — OPTIMIZATION OBJECTIVE
+============================================================
+
+Create a configurable objective function.
+
+Conceptually maximize:
+
+maintenance_priority
++
+coordination_benefit
++
+asset_availability_benefit
+
+minus:
+
+train_impact_penalty
+maintenance_downtime_penalty
+resource_penalty
+deferral_penalty
+unserved_critical_task_penalty
+
+Do NOT use arbitrary weights without documenting them.
+
+Put all weights in configuration.
+
+Provide a clear explanation of every objective component.
+
+Example:
+
+maximize:
+
+Σ(priority_i * x_i)
++
+Σ(coordination_bonus * y)
+-
+Σ(train_impact * x_i)
+-
+Σ(downtime * x_i)
+-
+Σ(unserved_penalty * u_i)
+
+The exact mathematical formulation should be explained in comments and documentation.
+
+============================================================
+17. CHUNK 13 — HARD VS SOFT CONSTRAINTS
+============================================================
+
+Clearly distinguish:
+
+HARD CONSTRAINTS:
+
+- safety
+- unavailable block
+- impossible duration
+- impossible resource requirement
+- invalid section
+- impossible time
+- explicit train protection constraint
+
+SOFT CONSTRAINTS:
+
+- lower-priority maintenance
+- preferred working hours
+- minimizing train impact
+- minimizing cost
+- balancing workload
+- maximizing coordination
+
+Never convert safety constraints into soft penalties.
+
+============================================================
+18. CHUNK 14 — WEEKLY PLANNING
+============================================================
+
+Implement a weekly planning engine.
+
+Input:
+
+maintenance backlog
+new defects
+risk predictions
+priority scores
+train timetable
+block availability
+resources
+
+Output:
+
+7-day block plan.
+
+The optimizer should select:
+
+date
+section
+block
+tasks
+departments
+resources
+expected train impact
+priority
+reason
+
+============================================================
+19. CHUNK 15 — MONTHLY PLANNING
+============================================================
+
+Implement a monthly planning engine.
+
+Use rolling-horizon optimization.
+
+Do NOT independently optimize 30 days without considering future consequences.
+
+The system should:
+
+1. optimize current horizon
+2. execute/commit near-term blocks
+3. update remaining tasks
+4. introduce new defects/tasks
+5. re-optimize future horizon
+
+Keep near-term schedules more stable.
+
+Allow long-term tasks to move when new critical defects appear.
+
+============================================================
+20. CHUNK 16 — REPLANNING
+============================================================
+
+Support events such as:
+
+new critical defect
+train timetable change
+block cancellation
+crew unavailable
+machine unavailable
+unexpected asset failure
+
+When an event occurs:
+
+- identify affected blocks
+- preserve already completed work
+- preserve committed blocks where possible
+- remove invalid assignments
+- re-optimize affected horizon
+
+Return:
+
+old plan
+new plan
+changed assignments
+reason for changes
+
+============================================================
+21. CHUNK 17 — BASELINE COMPARISON
+============================================================
+
+Implement at least three planners:
+
+1. Naive/FCFS
+2. Greedy priority planner
+3. AI + CP-SAT optimizer
+
+Compare them.
+
+Metrics:
+
+maintenance completion rate
+critical-task completion rate
+weighted priority completion
+total possession hours
+average possession duration
+train conflicts
+estimated train impact
+resource utilization
+coordination savings
+asset availability proxy
+deferred maintenance
+optimization runtime
+
+The AI optimizer should NOT simply be called "better."
+
+Show numerical evidence.
+
+============================================================
+22. CHUNK 18 — ASSET AVAILABILITY METRIC
+============================================================
+
+Create an explicit asset availability metric.
+
+Example:
+
+availability =
+1 - downtime / observation_period
+
+Calculate:
+
+overall availability
+department availability
+section availability
+critical asset availability
+
+Also calculate:
+
+baseline availability
+optimized availability
+
+Then report:
+
+availability improvement
+
+Do not claim real railway operational improvement from synthetic data.
+
+Clearly label:
+
+"simulation result"
+
+when using synthetic data.
+
+============================================================
+23. CHUNK 19 — EXPLAINABLE OPTIMIZATION
+============================================================
+
+Every generated block must have a human-readable explanation.
+
+Example:
+
+BLOCK B-102
+
+Section:
+SEC-014
+
+Time:
+02:00–05:00
+
+Selected tasks:
+
+- Track tamping
+- Signal inspection
+- OHE inspection
+
+Why selected:
+
+1. Track task has critical risk = 0.92
+2. Maintenance is 24 days overdue
+3. Low train traffic during this window
+4. Three departments can coordinate
+5. Required crews are available
+6. No hard train conflict
+7. Combining tasks reduces infrastructure possession
+
+Also explain rejected blocks:
+
+Block B-107 rejected because:
+
+- 3 high-priority trains conflict
+- insufficient duration
+
+This explanation must be generated from actual optimization data, not fabricated text.
+
+============================================================
+24. CHUNK 20 — API LAYER
+============================================================
+
+After the ML/optimization engines work independently, expose them through FastAPI.
+
+Endpoints:
+
+GET /health
+
+POST /data/validate
+
+POST /risk/predict
+
+POST /priority/calculate
+
+POST /train-impact/analyze
+
+POST /blocks/candidates
+
+POST /blocks/optimize
+
+POST /plans/daily
+
+POST /plans/weekly
+
+POST /plans/monthly
+
+POST /plans/replan
+
+GET /models/status
+
+GET /plans/{plan_id}
+
+GET /explanations/{block_id}
+
+Do not place business logic directly inside route functions.
+
+Use service classes.
+
+============================================================
+25. CHUNK 21 — API RESPONSE FORMAT
+============================================================
+
+Use structured JSON.
+
+Example:
+
+{
+  "plan_id": "PLAN-2026-001",
+  "status": "OPTIMAL",
+  "objective_value": 8245.4,
+  "tasks_considered": 420,
+  "tasks_scheduled": 178,
+  "critical_tasks_scheduled": 32,
+  "blocks_used": 67,
+  "train_conflicts": 0,
+  "estimated_train_impact": 14.2,
+  "coordination_savings_hours": 28.5,
+  "asset_availability": 0.968,
+  "assignments": [],
+  "warnings": []
+}
+
+============================================================
+26. CHUNK 22 — MODEL VERSIONING
+============================================================
+
+Every trained ML model must save metadata:
+
+model_name
+model_version
+training_date
+features
+dataset_version
+metrics
+hyperparameters
+
+Example:
+
+models/
+├── asset_risk/
+│   ├── model.joblib
+│   ├── metadata.json
+│   └── feature_importance.csv
+│
+└── train_impact/
+    ├── model.joblib
+    └── metadata.json
+
+============================================================
+27. CHUNK 23 — TESTING
+============================================================
+
+Create unit tests for:
+
+data validation
+risk prediction
+priority calculation
+interval overlap
+train conflict detection
+candidate generation
+task compatibility
+resource constraints
+block capacity
+optimizer feasibility
+deadline constraints
+replanning
+evaluation metrics
+
+Create integration tests:
+
+synthetic data
+→ ML
+→ priority
+→ candidates
+→ optimizer
+→ plan
+→ evaluation
+
+The complete pipeline should run from a clean environment.
+
+============================================================
+28. CHUNK 24 — EDGE CASES
+============================================================
+
+Explicitly handle:
+
+- no feasible block
+- no available resources
+- multiple critical tasks competing for one block
+- task longer than every available block
+- block with multiple conflicting trains
+- zero maintenance tasks
+- zero trains
+- duplicate task IDs
+- invalid section IDs
+- missing condition data
+- missing timetable data
+- midnight-crossing blocks
+- cancelled trains
+- cancelled blocks
+- resource becoming unavailable
+- new critical defect
+- optimizer timeout
+- infeasible optimization model
+
+The API must return meaningful errors.
+
+Never crash silently.
+
+============================================================
+29. CHUNK 25 — PERFORMANCE
+============================================================
+
+The system should be designed to scale.
+
+Avoid:
+
+O(tasks × blocks × trains × resources)
+
+where unnecessary.
+
+Use:
+
+- indexed Pandas operations
+- dictionaries
+- precomputed candidate assignments
+- section-based filtering
+- time-window indexing
+- sparse optimization variables
+
+Do not create CP-SAT variables for impossible task-block combinations.
+
+For large datasets, profile bottlenecks.
+
+============================================================
+30. CHUNK 26 — CONFIGURATION
+============================================================
+
+Create a central configuration system.
+
+Example:
+
+config.yaml
+
+risk_weights:
+  risk: 0.40
+  criticality: 0.25
+  severity: 0.20
+  urgency: 0.15
+
+optimization:
+  train_penalty: 10
+  coordination_bonus: 20
+  downtime_penalty: 5
+  deferral_penalty: 50
+  critical_task_penalty: 1000
+
+solver:
+  max_time_seconds: 60
+  workers: 8
+
+Never scatter these numbers throughout the source code.
+
+============================================================
+31. CHUNK 27 — DATASET COMPATIBILITY
+============================================================
+
+The system must support both:
+
+1. Synthetic prototype data
+2. Real/public railway data later
+
+Design the schema so public Indian Railways timetable/network datasets can be plugged into it.
+
+Do not hard-code fake railway station names or fake APIs.
+
+Clearly distinguish:
+
+REAL DATA
+PUBLIC PROXY DATA
+SYNTHETIC DATA
+
+in metadata.
+
+============================================================
+32. CHUNK 28 — RESEARCH-GRADE EVALUATION
+============================================================
+
+Evaluate the system against the following questions:
+
+1. Does it reduce total maintenance possession time?
+
+2. Does it increase completion of high-priority tasks?
+
+3. Does it reduce train conflicts?
+
+4. Does it improve asset availability?
+
+5. Does multi-department coordination reduce duplicate possessions?
+
+6. Does predictive risk improve prioritization?
+
+7. Does CP-SAT outperform FCFS and greedy scheduling?
+
+8. How does performance change as workload increases?
+
+Perform experiments with:
+
+100 tasks
+500 tasks
+1,000 tasks
+5,000 tasks
+
+and varying:
+
+train density
+block availability
+resource availability
+critical task percentage
+
+Record:
+
+runtime
+objective value
+feasibility
+task completion
+train impact
+availability
+
+============================================================
+33. CHUNK 29 — LOGGING
+============================================================
+
+Use Python logging.
+
+Log:
+
+data ingestion
+validation errors
+model loading
+prediction
+candidate generation
+optimizer start
+optimizer status
+solver runtime
+objective value
+number of assignments
+replanning events
+
+Do not print everything using print().
+
+Use appropriate log levels:
+
+DEBUG
+INFO
+WARNING
+ERROR
+
+============================================================
+34. CHUNK 30 — FINAL PIPELINE
+============================================================
+
+Create one command:
+
+python scripts/run_pipeline.py
+
+It should execute:
+
+1. Load data
+2. Validate data
+3. Integrate data
+4. Generate features
+5. Load/train risk model
+6. Generate risk predictions
+7. Calculate maintenance priority
+8. Analyze train conflicts
+9. Generate block candidates
+10. Detect multi-department opportunities
+11. Run CP-SAT optimization
+12. Generate daily/weekly/monthly plans
+13. Calculate evaluation metrics
+14. Generate explanation report
+15. Save results
+
+Output:
+
+data/processed/
+models/
+results/
+
+============================================================
+35. CODING QUALITY REQUIREMENTS
+============================================================
+
+Write clean, production-oriented Python.
+
+Requirements:
+
+- PEP8
+- type hints
+- docstrings
+- modular functions
+- no duplicated logic
+- no magic numbers
+- configuration-driven weights
+- meaningful variable names
+- proper exception handling
+- deterministic random seeds
+- testable functions
+
+Avoid:
+
+- giant Python files
+- notebook-only implementations
+- hard-coded paths
+- hard-coded credentials
+- fake API responses presented as real
+- unnecessary deep learning
+- unnecessary LangChain
+- unnecessary microservices
+- premature complexity
+
+============================================================
+36. IMPORTANT ML RULE
+============================================================
+
+Do NOT claim that the synthetic target represents actual Indian Railways failure behavior.
+
+When synthetic labels are used, explicitly state:
+
+"This model is a prototype trained/evaluated on synthetic or proxy data and must be retrained and validated using authorized operational railway data before real-world deployment."
+
+============================================================
+37. IMPORTANT SAFETY RULE
+============================================================
+
+This is a railway infrastructure planning system.
+
+The optimizer must NEVER present itself as replacing railway safety authorities or operational control.
+
+Safety constraints must be hard constraints.
+
+The system should be described as:
+
+"decision support / planning assistance"
+
+rather than autonomous railway control.
+
+The system must not issue real-world train-control commands.
+
+============================================================
+38. DEVELOPMENT ORDER
+============================================================
+
+Develop strictly in this order:
+
+CHUNK 1:
+Data models
+
+CHUNK 2:
+Data ingestion/integration
+
+CHUNK 3:
+Synthetic data generator
+
+CHUNK 4:
+Asset risk ML
+
+CHUNK 5:
+Risk explanation
+
+CHUNK 6:
+Maintenance priority
+
+CHUNK 7:
+Train conflict detection
+
+CHUNK 8:
+Optional train impact ML
+
+CHUNK 9:
+Block candidate generation
+
+CHUNK 10:
+Multi-department coordination
+
+CHUNK 11:
+CP-SAT optimization
+
+CHUNK 12:
+Objective function
+
+CHUNK 13:
+Hard/soft constraints
+
+CHUNK 14:
+Weekly planning
+
+CHUNK 15:
+Monthly planning
+
+CHUNK 16:
+Dynamic replanning
+
+CHUNK 17:
+Baseline comparison
+
+CHUNK 18:
+Asset availability metrics
+
+CHUNK 19:
+Optimization explanations
+
+CHUNK 20:
+FastAPI
+
+CHUNK 21:
+API responses
+
+CHUNK 22:
+Model versioning
+
+CHUNK 23:
+Testing
+
+CHUNK 24:
+Edge cases
+
+CHUNK 25:
+Performance optimization
+
+CHUNK 26:
+Configuration
+
+CHUNK 27:
+Public dataset compatibility
+
+CHUNK 28:
+Research-grade evaluation
+
+CHUNK 29:
+Logging
+
+CHUNK 30:
+Complete pipeline
+
+============================================================
+39. HOW TO RESPOND DURING DEVELOPMENT
+============================================================
+
+DO NOT generate all 30 chunks at once.
+
+Develop one chunk at a time.
+
+For every chunk provide:
+
+1. Purpose
+2. What it receives as input
+3. What it produces as output
+4. Files created/modified
+5. Complete code
+6. Explanation of the code
+7. Mathematical formulation where relevant
+8. How to run it
+9. Expected output
+10. Tests
+11. Integration with the previous chunk
+12. What the next chunk will consume
+
+After completing a chunk, verify that it integrates with all previous chunks before moving forward.
+
+If a previous implementation must be modified, explain:
+
+- why
+- which file
+- exact change
+- backward compatibility impact
+
+Never silently overwrite previous functionality.
+
+============================================================
+40. FINAL GOAL
+============================================================
+
+The completed backend should be able to execute:
+
+Maintenance data
++
+Asset condition
++
+Defects
++
+Train timetable
++
+Block availability
++
+Resources
++
+Departmental tasks
+        ↓
+AI risk prediction
+        ↓
+Maintenance priority
+        ↓
+Train impact analysis
+        ↓
+Candidate block generation
+        ↓
+Multi-department coordination
+        ↓
+CP-SAT optimization
+        ↓
+Optimized block plan
+        ↓
+Daily / Weekly / Monthly schedule
+        ↓
+Explainable recommendations
+        ↓
+Evaluation against baseline
+
+The final system should answer:
+
+"WHAT maintenance should be performed?"
+
+"HOW URGENT is it?"
+
+"WHERE should it be performed?"
+
+"WHEN should the block be taken?"
+
+"WHICH departments should coordinate?"
+
+"WHICH trains could be affected?"
+
+"WHICH resources are required?"
+
+"WHY did the optimizer select this block?"
+
+"WHY were other blocks rejected?"
+
+"HOW much infrastructure downtime was saved?"
+
+"HOW did asset availability improve?"
+
+"WHAT happens if a new critical defect appears?"
+
+Build this as a technically rigorous, modular, research-grade prototype that can later be connected to authorized Indian Railways operational data. i will provide you dataset later first build this and it should have optimal code
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-09-08T15:28:01+05:30.
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Gemini 3.7 Flash (Medium). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>

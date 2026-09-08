@@ -1,0 +1,42 @@
+{
+  "model_name": "LinearRegression",
+  "model_version": "1.0.0",
+  "training_date": "2026-09-08T21:04:30.092004",
+  "random_seed": 42,
+  "disclaimer": "This train delay model is an advisory proxy trained on synthetic/historical simulation data. It acts as a soft penalty in the optimizer and must never override deterministic railway safety constraints.",
+  "features": [
+    "block_duration_hours",
+    "overlap_minutes",
+    "train_priority",
+    "hour_of_day",
+    "day_of_week",
+    "rainfall_mm",
+    "temperature_c",
+    "section_length_km",
+    "train_type",
+    "direction",
+    "weather_condition"
+  ],
+  "dataset_samples": 1587,
+  "hyperparameters": {
+    "copy_X": true,
+    "fit_intercept": true,
+    "n_jobs": null,
+    "positive": false,
+    "tol": 1e-06
+  },
+  "metrics": {
+    "champion": {
+      "model_name": "RandomForestRegressor (Ensemble)",
+      "mae": 2.41,
+      "rmse": 3.03,
+      "r2_score": 0.8608
+    },
+    "baseline": {
+      "model_name": "LinearRegression (Baseline)",
+      "mae": 2.31,
+      "rmse": 2.95,
+      "r2_score": 0.8688
+    }
+  }
+}

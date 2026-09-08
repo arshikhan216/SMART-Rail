@@ -1,0 +1,11 @@
+metric_name,baseline_name,target_name,sample_size,baseline_mean,baseline_std,target_mean,target_std,mean_difference,relative_improvement_pct,t_statistic,t_test_p_value,wilcoxon_statistic,wilcoxon_p_value,is_significant_at_p05,is_significant_at_p01
+Tasks Scheduled (Count) (vs FCFS),FCFS Baseline,CP-SAT Optimal,2,63.0,0.0,63.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Tasks Scheduled (Count) (vs Greedy Priority),Greedy Priority,CP-SAT Optimal,2,63.0,0.0,63.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Critical Tasks Scheduled (Count) (vs FCFS),FCFS Baseline,CP-SAT Optimal,2,15.5,0.7071,15.5,0.7071,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Critical Tasks Scheduled (Count) (vs Greedy Priority),Greedy Priority,CP-SAT Optimal,2,15.5,0.7071,15.5,0.7071,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Coordination Savings (Hours) (vs FCFS),FCFS Baseline,CP-SAT Optimal,2,78.75,0.0,78.75,0.0,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Coordination Savings (Hours) (vs Greedy Priority),Greedy Priority,CP-SAT Optimal,2,72.75,0.0,78.75,0.0,6.0,8.25,inf,0.0,0.0,0.5,True,True
+Estimated Train Disruption Score (vs FCFS),FCFS Baseline,CP-SAT Optimal,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Estimated Train Disruption Score (vs Greedy Priority),Greedy Priority,CP-SAT Optimal,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,0.0,1.0,False,False
+Asset Availability (%) (vs FCFS),FCFS Baseline,CP-SAT Optimal,2,1.0,0.0,0.9531,0.0,-0.0469,-4.69,-inf,0.0,0.0,0.5,True,True
+Asset Availability (%) (vs Greedy Priority),Greedy Priority,CP-SAT Optimal,2,1.0,0.0,0.9531,0.0,-0.0469,-4.69,-inf,0.0,0.0,0.5,True,True

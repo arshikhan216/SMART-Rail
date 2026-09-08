@@ -1,0 +1,58 @@
+{
+  "model_id": "asset_risk_model_v2.0.0",
+  "model_name": "asset_risk_model",
+  "version": "2.0.0",
+  "algorithm": "RandomForestClassifier",
+  "created_at": "2026-09-08 21:04:29.035175",
+  "metrics": {
+    "roc_auc": 1.0,
+    "pr_auc": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "brier_score": 0.0035
+  },
+  "feature_names": [
+    "condition_score",
+    "age_years",
+    "traffic_load",
+    "criticality",
+    "defect_count",
+    "max_defect_severity",
+    "total_overdue_days",
+    "days_since_maintenance",
+    "historical_failures_count",
+    "department"
+  ],
+  "hyperparameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced",
+    "criterion": "gini",
+    "max_depth": 6,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 1,
+    "min_samples_split": 4,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 100,
+    "n_jobs": null,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "artifact_paths": {
+    "model.joblib": "models/registry/asset_risk_model/v2.0.0/model.joblib",
+    "pipeline.joblib": "models/registry/asset_risk_model/v2.0.0/pipeline.joblib"
+  },
+  "artifact_checksums": {
+    "model.joblib": "0dec6d05eb1b4d9e0e12e8271be8d5b5420e22e1226d929f9fd31695f5f6de2a",
+    "pipeline.joblib": "b3c729c513a9f9d3fdebdc84414f7e9008c077014a9bb6b8e989783ee07db9ab"
+  },
+  "is_active": true,
+  "description": "Champion model trained on user-provided RKMP-BPL dataset"
+}

@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\caption{Empirical Performance Comparison: CP-SAT Optimal vs. Heuristic Baselines ($N=2$ Instances)}
+\label{tab:block_planner_benchmark}
+\begin{tabular}{lrrrrrr}
+\hline
+\textbf{Metric} & \textbf{FCFS Mean (Std)} & \textbf{Greedy Mean (Std)} & \textbf{CP-SAT Mean (Std)} & \textbf{$\Delta$ vs FCFS (\%)} & \textbf{$p$-value ($t$-test)} & \textbf{Signif.} \\
+\hline
+Tasks Scheduled (Count) & 63.00 (0.00) & 63.00 (0.00) & 63.00 (0.00) & +0.0\% & 1.0000 & n.s. \\
+Critical Tasks Scheduled (Count) & 15.50 (0.71) & 15.50 (0.71) & 15.50 (0.71) & +0.0\% & 1.0000 & n.s. \\
+Coordination Savings (Hours) & 78.75 (0.00) & 72.75 (0.00) & 78.75 (0.00) & +0.0\% & 1.0000 & n.s. \\
+Estimated Train Disruption Score & 0.00 (0.00) & 0.00 (0.00) & 0.00 (0.00) & +0.0\% & 1.0000 & n.s. \\
+Asset Availability (%) & 1.00 (0.00) & 1.00 (0.00) & 0.95 (0.00) & -4.7\% & 0.0000 & $***$ \\
+\hline
+\multicolumn{7}{l}{\footnotesize $*** p < 0.01$, $** p < 0.05$, n.s.: not significant} \\
+\end{tabular}
+\end{table}

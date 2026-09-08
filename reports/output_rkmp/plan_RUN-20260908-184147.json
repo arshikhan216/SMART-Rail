@@ -1,0 +1,247 @@
+{
+  "plan_id": "WEEKLY-PLAN-20260301",
+  "week_start_date": "2026-03-01",
+  "week_end_date": "2026-03-07",
+  "daily_plans": [
+    {
+      "date": "2026-03-01",
+      "day_name": "Sunday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-RKMP-002",
+          "task_ids": [
+            "TSK-RKMP-02",
+            "TSK-RKMP-06",
+            "TSK-RKMP-07"
+          ],
+          "section_id": "SEC-RKMP-BPL",
+          "departments": [
+            "S_AND_T",
+            "TRACTION",
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-01T11:00:00",
+          "scheduled_end": "2026-03-01T14:30:00",
+          "duration_hours": 3.25,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 156.23,
+          "coordination_savings_hours": 3.75,
+          "explanation": "Block BLK-RKMP-002 on SEC-RKMP-BPL (11:00-14:30): Assigned 3 tasks across ['S_AND_T', 'TRACTION', 'ENGINEERING']. Total Priority: 156.2, Train Impact: 0.0, Coordination Savings: 3.8h."
+        }
+      ],
+      "tasks_scheduled": 3,
+      "blocks_used": 1,
+      "total_possession_hours": 3.25,
+      "coordination_savings_hours": 3.75,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 3.25,
+        "S_AND_T": 3.25,
+        "TRACTION": 3.25
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-02",
+      "day_name": "Monday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-RKMP-004",
+          "task_ids": [
+            "TSK-RKMP-01",
+            "TSK-RKMP-03",
+            "TSK-RKMP-05"
+          ],
+          "section_id": "SEC-RKMP-BPL",
+          "departments": [
+            "TRACTION",
+            "ENGINEERING",
+            "S_AND_T"
+          ],
+          "scheduled_start": "2026-03-02T11:00:00",
+          "scheduled_end": "2026-03-02T14:30:00",
+          "duration_hours": 3.25,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 212.88,
+          "coordination_savings_hours": 3.75,
+          "explanation": "Block BLK-RKMP-004 on SEC-RKMP-BPL (11:00-14:30): Assigned 3 tasks across ['TRACTION', 'ENGINEERING', 'S_AND_T']. Total Priority: 212.9, Train Impact: 0.0, Coordination Savings: 3.8h."
+        }
+      ],
+      "tasks_scheduled": 3,
+      "blocks_used": 1,
+      "total_possession_hours": 3.25,
+      "coordination_savings_hours": 3.75,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 3.25,
+        "S_AND_T": 3.25,
+        "TRACTION": 3.25
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-03",
+      "day_name": "Tuesday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-RKMP-006",
+          "task_ids": [
+            "TSK-RKMP-04"
+          ],
+          "section_id": "SEC-RKMP-BPL",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-03T11:00:00",
+          "scheduled_end": "2026-03-03T14:30:00",
+          "duration_hours": 2.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 42.54,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-RKMP-006 on SEC-RKMP-BPL (11:00-14:30): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 42.5, Train Impact: 0.0, Coordination Savings: 0.0h."
+        }
+      ],
+      "tasks_scheduled": 1,
+      "blocks_used": 1,
+      "total_possession_hours": 2.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 2.0,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-04",
+      "day_name": "Wednesday",
+      "assignments": [],
+      "tasks_scheduled": 0,
+      "blocks_used": 0,
+      "total_possession_hours": 0.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 0.0,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-05",
+      "day_name": "Thursday",
+      "assignments": [],
+      "tasks_scheduled": 0,
+      "blocks_used": 0,
+      "total_possession_hours": 0.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 0.0,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-06",
+      "day_name": "Friday",
+      "assignments": [],
+      "tasks_scheduled": 0,
+      "blocks_used": 0,
+      "total_possession_hours": 0.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 0.0,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-07",
+      "day_name": "Saturday",
+      "assignments": [],
+      "tasks_scheduled": 0,
+      "blocks_used": 0,
+      "total_possession_hours": 0.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 0.0,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    }
+  ],
+  "total_tasks_considered": 7,
+  "total_tasks_scheduled": 7,
+  "total_unassigned_tasks": [],
+  "total_blocks_used": 3,
+  "total_possession_hours": 8.5,
+  "total_coordination_savings_hours": 7.5,
+  "overall_asset_availability": 0.9747,
+  "department_summaries": {
+    "ENGINEERING": {
+      "department": "ENGINEERING",
+      "tasks_scheduled": 3,
+      "total_hours": 7.5,
+      "critical_tasks_scheduled": 1
+    },
+    "S_AND_T": {
+      "department": "S_AND_T",
+      "tasks_scheduled": 2,
+      "total_hours": 3.5,
+      "critical_tasks_scheduled": 1
+    },
+    "TRACTION": {
+      "department": "TRACTION",
+      "tasks_scheduled": 2,
+      "total_hours": 5.0,
+      "critical_tasks_scheduled": 1
+    }
+  },
+  "audit_records": [
+    {
+      "constraint_name": "SectionIntegrity",
+      "constraint_type": "HARD",
+      "category": "SECTION_INTEGRITY",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    },
+    {
+      "constraint_name": "DurationCapacity",
+      "constraint_type": "HARD",
+      "category": "TEMPORAL",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    },
+    {
+      "constraint_name": "MutuallyExclusiveSafety",
+      "constraint_type": "HARD",
+      "category": "SAFETY",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    },
+    {
+      "constraint_name": "MandatoryDeadline",
+      "constraint_type": "HARD",
+      "category": "TEMPORAL",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    }
+  ],
+  "optimization_status": "OPTIMAL",
+  "warnings": []
+}

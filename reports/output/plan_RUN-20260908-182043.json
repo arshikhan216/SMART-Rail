@@ -1,0 +1,691 @@
+{
+  "plan_id": "WEEKLY-PLAN-20260301",
+  "week_start_date": "2026-03-01",
+  "week_end_date": "2026-03-07",
+  "daily_plans": [
+    {
+      "date": "2026-03-01",
+      "day_name": "Sunday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-00015",
+          "task_ids": [
+            "TSK-CORR-00027",
+            "TSK-PREV-00053"
+          ],
+          "section_id": "SEC-BRC-ADI",
+          "departments": [
+            "ENGINEERING",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-01T01:30:00",
+          "scheduled_end": "2026-03-01T05:00:00",
+          "duration_hours": 2.75,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 69.07,
+          "coordination_savings_hours": 1.25,
+          "explanation": "Block BLK-00015 on SEC-BRC-ADI (01:30-05:00): Assigned 2 tasks across ['ENGINEERING', 'TRACTION']. Total Priority: 69.1, Train Impact: 0.0, Coordination Savings: 1.2h."
+        },
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-00010",
+          "task_ids": [
+            "TSK-CORR-00029"
+          ],
+          "section_id": "SEC-DDU-PNBE",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-01T11:30:00",
+          "scheduled_end": "2026-03-01T14:00:00",
+          "duration_hours": 2.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 100.0,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00010 on SEC-DDU-PNBE (11:30-14:00): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 100.0, Train Impact: 0.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-00003",
+          "task_ids": [
+            "TSK-PREV-00042"
+          ],
+          "section_id": "SEC-GZB-CNB",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-01T01:30:00",
+          "scheduled_end": "2026-03-01T05:00:00",
+          "duration_hours": 1.0,
+          "expected_train_impact": 2.67,
+          "combined_priority_score": 56.52,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00003 on SEC-GZB-CNB (01:30-05:00): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 56.5, Train Impact: 2.7, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-00004",
+          "task_ids": [
+            "TSK-PREV-00065"
+          ],
+          "section_id": "SEC-GZB-CNB",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-01T11:30:00",
+          "scheduled_end": "2026-03-01T14:00:00",
+          "duration_hours": 2.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 39.0,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00004 on SEC-GZB-CNB (11:30-14:00): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 39.0, Train Impact: 0.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-00007",
+          "task_ids": [
+            "TSK-PREV-00079",
+            "TSK-PREV-00093"
+          ],
+          "section_id": "SEC-PRYJ-DDU",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-01T01:30:00",
+          "scheduled_end": "2026-03-01T05:00:00",
+          "duration_hours": 3.0,
+          "expected_train_impact": 1.5,
+          "combined_priority_score": 53.56,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00007 on SEC-PRYJ-DDU (01:30-05:00): Assigned 2 tasks across ['ENGINEERING']. Total Priority: 53.6, Train Impact: 1.5, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-00014",
+          "task_ids": [
+            "TSK-PREV-00049",
+            "TSK-PREV-00067"
+          ],
+          "section_id": "SEC-ST-BRC",
+          "departments": [
+            "S_AND_T",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-01T11:30:00",
+          "scheduled_end": "2026-03-01T14:00:00",
+          "duration_hours": 2.25,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 79.46,
+          "coordination_savings_hours": 0.75,
+          "explanation": "Block BLK-00014 on SEC-ST-BRC (11:30-14:00): Assigned 2 tasks across ['S_AND_T', 'TRACTION']. Total Priority: 79.5, Train Impact: 0.0, Coordination Savings: 0.8h."
+        }
+      ],
+      "tasks_scheduled": 9,
+      "blocks_used": 6,
+      "total_possession_hours": 13.0,
+      "coordination_savings_hours": 2.0,
+      "estimated_train_impact": 4.17,
+      "department_hours": {
+        "ENGINEERING": 10.75,
+        "S_AND_T": 2.25,
+        "TRACTION": 5.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-02",
+      "day_name": "Monday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-00024",
+          "task_ids": [
+            "TSK-PREV-00099"
+          ],
+          "section_id": "SEC-GZB-CNB",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-02T11:30:00",
+          "scheduled_end": "2026-03-02T14:00:00",
+          "duration_hours": 1.5,
+          "expected_train_impact": 2.93,
+          "combined_priority_score": 44.0,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00024 on SEC-GZB-CNB (11:30-14:00): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 44.0, Train Impact: 2.9, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0001",
+          "block_id": "BLK-00022",
+          "task_ids": [
+            "TSK-CORR-00010",
+            "TSK-PREV-00045"
+          ],
+          "section_id": "SEC-NDLS-GZB",
+          "departments": [
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-02T11:30:00",
+          "scheduled_end": "2026-03-02T14:00:00",
+          "duration_hours": 2.5,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 105.68,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00022 on SEC-NDLS-GZB (11:30-14:00): Assigned 2 tasks across ['TRACTION']. Total Priority: 105.7, Train Impact: 0.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-00034",
+          "task_ids": [
+            "TSK-PREV-00073",
+            "TSK-PREV-00097"
+          ],
+          "section_id": "SEC-ST-BRC",
+          "departments": [
+            "S_AND_T",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-02T11:30:00",
+          "scheduled_end": "2026-03-02T14:00:00",
+          "duration_hours": 1.75,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 82.92,
+          "coordination_savings_hours": 1.25,
+          "explanation": "Block BLK-00034 on SEC-ST-BRC (11:30-14:00): Assigned 2 tasks across ['S_AND_T', 'TRACTION']. Total Priority: 82.9, Train Impact: 0.0, Coordination Savings: 1.2h."
+        }
+      ],
+      "tasks_scheduled": 5,
+      "blocks_used": 3,
+      "total_possession_hours": 5.75,
+      "coordination_savings_hours": 1.25,
+      "estimated_train_impact": 2.93,
+      "department_hours": {
+        "ENGINEERING": 1.5,
+        "S_AND_T": 1.75,
+        "TRACTION": 4.25
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-03",
+      "day_name": "Tuesday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-00049",
+          "task_ids": [
+            "TSK-CORR-00028",
+            "TSK-CORR-00030"
+          ],
+          "section_id": "SEC-DDU-PNBE",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-03T01:30:00",
+          "scheduled_end": "2026-03-03T05:00:00",
+          "duration_hours": 3.5,
+          "expected_train_impact": 2.37,
+          "combined_priority_score": 180.11,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00049 on SEC-DDU-PNBE (01:30-05:00): Assigned 2 tasks across ['ENGINEERING']. Total Priority: 180.1, Train Impact: 2.4, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-00047",
+          "task_ids": [
+            "TSK-CORR-00036",
+            "TSK-PREV-00082"
+          ],
+          "section_id": "SEC-PRYJ-DDU",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-03T01:30:00",
+          "scheduled_end": "2026-03-03T05:00:00",
+          "duration_hours": 3.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 51.76,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00047 on SEC-PRYJ-DDU (01:30-05:00): Assigned 2 tasks across ['ENGINEERING']. Total Priority: 51.8, Train Impact: 0.0, Coordination Savings: 0.0h."
+        }
+      ],
+      "tasks_scheduled": 4,
+      "blocks_used": 2,
+      "total_possession_hours": 6.5,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 2.37,
+      "department_hours": {
+        "ENGINEERING": 6.5,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-04",
+      "day_name": "Wednesday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-00075",
+          "task_ids": [
+            "TSK-PREV-00046",
+            "TSK-PREV-00066"
+          ],
+          "section_id": "SEC-BRC-ADI",
+          "departments": [
+            "ENGINEERING",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-04T01:30:00",
+          "scheduled_end": "2026-03-04T05:00:00",
+          "duration_hours": 1.75,
+          "expected_train_impact": 1.93,
+          "combined_priority_score": 115.11,
+          "coordination_savings_hours": 0.75,
+          "explanation": "Block BLK-00075 on SEC-BRC-ADI (01:30-05:00): Assigned 2 tasks across ['ENGINEERING', 'TRACTION']. Total Priority: 115.1, Train Impact: 1.9, Coordination Savings: 0.8h."
+        },
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-00069",
+          "task_ids": [
+            "TSK-CORR-00035",
+            "TSK-PREV-00072",
+            "TSK-PREV-00086"
+          ],
+          "section_id": "SEC-DDU-PNBE",
+          "departments": [
+            "ENGINEERING",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-04T01:30:00",
+          "scheduled_end": "2026-03-04T05:00:00",
+          "duration_hours": 1.75,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 193.0,
+          "coordination_savings_hours": 2.75,
+          "explanation": "Block BLK-00069 on SEC-DDU-PNBE (01:30-05:00): Assigned 3 tasks across ['ENGINEERING', 'TRACTION']. Total Priority: 193.0, Train Impact: 0.0, Coordination Savings: 2.8h."
+        },
+        {
+          "assignment_id": "ASGN-0004",
+          "block_id": "BLK-00070",
+          "task_ids": [
+            "TSK-CORR-00011"
+          ],
+          "section_id": "SEC-DDU-PNBE",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-04T11:30:00",
+          "scheduled_end": "2026-03-04T14:00:00",
+          "duration_hours": 2.5,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 41.4,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00070 on SEC-DDU-PNBE (11:30-14:00): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 41.4, Train Impact: 0.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0004",
+          "block_id": "BLK-00063",
+          "task_ids": [
+            "TSK-PREV-00056",
+            "TSK-PREV-00078"
+          ],
+          "section_id": "SEC-GZB-CNB",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-04T01:30:00",
+          "scheduled_end": "2026-03-04T05:00:00",
+          "duration_hours": 2.0,
+          "expected_train_impact": 1.97,
+          "combined_priority_score": 68.18,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00063 on SEC-GZB-CNB (01:30-05:00): Assigned 2 tasks across ['ENGINEERING']. Total Priority: 68.2, Train Impact: 2.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0002",
+          "block_id": "BLK-00061",
+          "task_ids": [
+            "TSK-CORR-00007"
+          ],
+          "section_id": "SEC-NDLS-GZB",
+          "departments": [
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-04T01:30:00",
+          "scheduled_end": "2026-03-04T05:00:00",
+          "duration_hours": 3.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 59.0,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00061 on SEC-NDLS-GZB (01:30-05:00): Assigned 1 tasks across ['TRACTION']. Total Priority: 59.0, Train Impact: 0.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-00074",
+          "task_ids": [
+            "TSK-CORR-00023",
+            "TSK-PREV-00088",
+            "TSK-PREV-00098"
+          ],
+          "section_id": "SEC-ST-BRC",
+          "departments": [
+            "S_AND_T",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-04T11:30:00",
+          "scheduled_end": "2026-03-04T14:00:00",
+          "duration_hours": 2.25,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 115.06,
+          "coordination_savings_hours": 2.25,
+          "explanation": "Block BLK-00074 on SEC-ST-BRC (11:30-14:00): Assigned 3 tasks across ['S_AND_T', 'TRACTION']. Total Priority: 115.1, Train Impact: 0.0, Coordination Savings: 2.2h."
+        }
+      ],
+      "tasks_scheduled": 12,
+      "blocks_used": 6,
+      "total_possession_hours": 13.25,
+      "coordination_savings_hours": 5.75,
+      "estimated_train_impact": 3.9,
+      "department_hours": {
+        "ENGINEERING": 8.0,
+        "S_AND_T": 2.25,
+        "TRACTION": 8.75
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-05",
+      "day_name": "Thursday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0005",
+          "block_id": "BLK-00084",
+          "task_ids": [
+            "TSK-PREV-00076"
+          ],
+          "section_id": "SEC-GZB-CNB",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-05T11:30:00",
+          "scheduled_end": "2026-03-05T14:00:00",
+          "duration_hours": 1.5,
+          "expected_train_impact": 3.1,
+          "combined_priority_score": 31.66,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00084 on SEC-GZB-CNB (11:30-14:00): Assigned 1 tasks across ['ENGINEERING']. Total Priority: 31.7, Train Impact: 3.1, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-00081",
+          "task_ids": [
+            "TSK-CORR-00009",
+            "TSK-PREV-00101"
+          ],
+          "section_id": "SEC-NDLS-GZB",
+          "departments": [
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-05T01:30:00",
+          "scheduled_end": "2026-03-05T05:00:00",
+          "duration_hours": 3.5,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 117.38,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00081 on SEC-NDLS-GZB (01:30-05:00): Assigned 2 tasks across ['TRACTION']. Total Priority: 117.4, Train Impact: 0.0, Coordination Savings: 0.0h."
+        },
+        {
+          "assignment_id": "ASGN-0004",
+          "block_id": "BLK-00082",
+          "task_ids": [
+            "TSK-CORR-00008"
+          ],
+          "section_id": "SEC-NDLS-GZB",
+          "departments": [
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-05T11:30:00",
+          "scheduled_end": "2026-03-05T14:00:00",
+          "duration_hours": 2.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 49.0,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00082 on SEC-NDLS-GZB (11:30-14:00): Assigned 1 tasks across ['TRACTION']. Total Priority: 49.0, Train Impact: 0.0, Coordination Savings: 0.0h."
+        }
+      ],
+      "tasks_scheduled": 4,
+      "blocks_used": 3,
+      "total_possession_hours": 7.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 3.1,
+      "department_hours": {
+        "ENGINEERING": 1.5,
+        "S_AND_T": 0.0,
+        "TRACTION": 5.5
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-06",
+      "day_name": "Friday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-00107",
+          "task_ids": [
+            "TSK-CORR-00004",
+            "TSK-PREV-00081"
+          ],
+          "section_id": "SEC-PRYJ-DDU",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-06T01:30:00",
+          "scheduled_end": "2026-03-06T05:00:00",
+          "duration_hours": 3.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 103.0,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00107 on SEC-PRYJ-DDU (01:30-05:00): Assigned 2 tasks across ['ENGINEERING']. Total Priority: 103.0, Train Impact: 0.0, Coordination Savings: 0.0h."
+        }
+      ],
+      "tasks_scheduled": 2,
+      "blocks_used": 1,
+      "total_possession_hours": 3.0,
+      "coordination_savings_hours": 0.0,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 3.0,
+        "S_AND_T": 0.0,
+        "TRACTION": 0.0
+      },
+      "is_feasibility_audited": true
+    },
+    {
+      "date": "2026-03-07",
+      "day_name": "Saturday",
+      "assignments": [
+        {
+          "assignment_id": "ASGN-0003",
+          "block_id": "BLK-00136",
+          "task_ids": [
+            "TSK-CORR-00026",
+            "TSK-PREV-00095"
+          ],
+          "section_id": "SEC-BRC-ADI",
+          "departments": [
+            "ENGINEERING",
+            "TRACTION"
+          ],
+          "scheduled_start": "2026-03-07T11:30:00",
+          "scheduled_end": "2026-03-07T14:00:00",
+          "duration_hours": 2.25,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 54.0,
+          "coordination_savings_hours": 1.25,
+          "explanation": "Block BLK-00136 on SEC-BRC-ADI (11:30-14:00): Assigned 2 tasks across ['ENGINEERING', 'TRACTION']. Total Priority: 54.0, Train Impact: 0.0, Coordination Savings: 1.2h."
+        },
+        {
+          "assignment_id": "ASGN-0004",
+          "block_id": "BLK-00127",
+          "task_ids": [
+            "TSK-PREV-00044",
+            "TSK-PREV-00050"
+          ],
+          "section_id": "SEC-PRYJ-DDU",
+          "departments": [
+            "ENGINEERING"
+          ],
+          "scheduled_start": "2026-03-07T01:30:00",
+          "scheduled_end": "2026-03-07T05:00:00",
+          "duration_hours": 3.0,
+          "expected_train_impact": 0.0,
+          "combined_priority_score": 77.5,
+          "coordination_savings_hours": 0.0,
+          "explanation": "Block BLK-00127 on SEC-PRYJ-DDU (01:30-05:00): Assigned 2 tasks across ['ENGINEERING']. Total Priority: 77.5, Train Impact: 0.0, Coordination Savings: 0.0h."
+        }
+      ],
+      "tasks_scheduled": 4,
+      "blocks_used": 2,
+      "total_possession_hours": 5.25,
+      "coordination_savings_hours": 1.25,
+      "estimated_train_impact": 0.0,
+      "department_hours": {
+        "ENGINEERING": 5.25,
+        "S_AND_T": 0.0,
+        "TRACTION": 2.25
+      },
+      "is_feasibility_audited": true
+    }
+  ],
+  "total_tasks_considered": 103,
+  "total_tasks_scheduled": 40,
+  "total_unassigned_tasks": [
+    "TSK-CORR-00003",
+    "TSK-CORR-00031",
+    "TSK-CORR-00032",
+    "TSK-CORR-00033",
+    "TSK-PREV-00043",
+    "TSK-PREV-00048",
+    "TSK-PREV-00058",
+    "TSK-PREV-00060",
+    "TSK-PREV-00070",
+    "TSK-PREV-00083",
+    "TSK-PREV-00085",
+    "TSK-PREV-00087",
+    "TSK-CORR-00012",
+    "TSK-CORR-00041",
+    "TSK-PREV-00080",
+    "TSK-CORR-00037",
+    "TSK-CORR-00040",
+    "TSK-CORR-00001",
+    "TSK-CORR-00005",
+    "TSK-CORR-00002",
+    "TSK-CORR-00034",
+    "TSK-PREV-00061",
+    "TSK-PREV-00075",
+    "TSK-PREV-00089",
+    "TSK-CORR-00013",
+    "TSK-CORR-00014",
+    "TSK-CORR-00019",
+    "TSK-CORR-00020",
+    "TSK-PREV-00051",
+    "TSK-PREV-00063",
+    "TSK-PREV-00077",
+    "TSK-PREV-00090",
+    "TSK-PREV-00092",
+    "TSK-PREV-00094",
+    "TSK-PREV-00096",
+    "TSK-CORR-00021",
+    "TSK-CORR-00022",
+    "TSK-CORR-00038",
+    "TSK-PREV-00091",
+    "TSK-PREV-00103",
+    "TSK-CORR-00006",
+    "TSK-CORR-00018",
+    "TSK-CORR-00025",
+    "TSK-PREV-00052",
+    "TSK-PREV-00054",
+    "TSK-PREV-00057",
+    "TSK-PREV-00064",
+    "TSK-PREV-00069",
+    "TSK-PREV-00074",
+    "TSK-PREV-00084",
+    "TSK-CORR-00015",
+    "TSK-CORR-00016",
+    "TSK-CORR-00017",
+    "TSK-CORR-00039",
+    "TSK-PREV-00047",
+    "TSK-PREV-00100",
+    "TSK-PREV-00102",
+    "TSK-CORR-00024",
+    "TSK-PREV-00055",
+    "TSK-PREV-00059",
+    "TSK-PREV-00062",
+    "TSK-PREV-00068",
+    "TSK-PREV-00071"
+  ],
+  "total_blocks_used": 23,
+  "total_possession_hours": 53.75,
+  "total_coordination_savings_hours": 10.25,
+  "overall_asset_availability": 0.984,
+  "department_summaries": {
+    "ENGINEERING": {
+      "department": "ENGINEERING",
+      "tasks_scheduled": 23,
+      "total_hours": 35.5,
+      "critical_tasks_scheduled": 3
+    },
+    "S_AND_T": {
+      "department": "S_AND_T",
+      "tasks_scheduled": 4,
+      "total_hours": 5.5,
+      "critical_tasks_scheduled": 0
+    },
+    "TRACTION": {
+      "department": "TRACTION",
+      "tasks_scheduled": 13,
+      "total_hours": 23.0,
+      "critical_tasks_scheduled": 2
+    }
+  },
+  "audit_records": [
+    {
+      "constraint_name": "SectionIntegrity",
+      "constraint_type": "HARD",
+      "category": "SECTION_INTEGRITY",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    },
+    {
+      "constraint_name": "DurationCapacity",
+      "constraint_type": "HARD",
+      "category": "TEMPORAL",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    },
+    {
+      "constraint_name": "MutuallyExclusiveSafety",
+      "constraint_type": "HARD",
+      "category": "SAFETY",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    },
+    {
+      "constraint_name": "MandatoryDeadline",
+      "constraint_type": "HARD",
+      "category": "TEMPORAL",
+      "is_satisfied": true,
+      "violations_count": 0,
+      "violation_details": []
+    }
+  ],
+  "optimization_status": "FEASIBLE",
+  "warnings": []
+}

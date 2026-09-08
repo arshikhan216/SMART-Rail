@@ -1,0 +1,10 @@
+Created At: 2026-09-08T20:42:43+05:30
+Completed At: 2026-09-08T20:42:46+05:30
+
+The command exited with code 1.
+Output:
+  File "<string>", line 11
+    print(f'Found TSK-00001 in line {i}, type={obj.get(" type\)},
+                                                       ^
+SyntaxError: unterminated string literal (detected at line 11)
+

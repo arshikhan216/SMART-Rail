@@ -1,0 +1,82 @@
+{
+  "model_name": "RandomForestClassifier",
+  "model_version": "1.0.0",
+  "training_date": "2026-09-08T21:04:28.996389",
+  "random_seed": 42,
+  "disclaimer": "This model is a prototype trained/evaluated on synthetic or proxy data and must be retrained and validated using authorized operational railway data before real-world deployment.",
+  "features": [
+    "condition_score",
+    "age_years",
+    "traffic_load",
+    "criticality",
+    "defect_count",
+    "max_defect_severity",
+    "total_overdue_days",
+    "days_since_maintenance",
+    "historical_failures_count",
+    "department"
+  ],
+  "dataset_samples": 1137,
+  "positive_class_ratio": 0.3702726473175022,
+  "hyperparameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced",
+    "criterion": "gini",
+    "max_depth": 6,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 1,
+    "min_samples_split": 4,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 100,
+    "n_jobs": null,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "metrics": {
+    "champion": {
+      "model_name": "RandomForestClassifier (Ensemble)",
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "brier_score": 0.0035,
+      "confusion_matrix": [
+        [
+          144,
+          0
+        ],
+        [
+          0,
+          84
+        ]
+      ]
+    },
+    "baseline": {
+      "model_name": "LogisticRegression (Baseline)",
+      "roc_auc": 1.0,
+      "pr_auc": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "brier_score": 0.0059,
+      "confusion_matrix": [
+        [
+          144,
+          0
+        ],
+        [
+          0,
+          84
+        ]
+      ]
+    }
+  }
+}

@@ -1,0 +1,63 @@
+# AI-Powered Automatic Block Planner Configuration for Indian Railways
+
+environment: "production"
+random_seed: 42
+
+# Risk weights for priority scoring (Must sum to 1.0)
+priority_weights:
+  risk: 0.40
+  criticality: 0.25
+  severity: 0.20
+  urgency: 0.15
+
+# Optimization solver hyperparameters and objective weights
+optimization:
+  solver_max_time_seconds: 60
+  num_workers: 8
+  relative_gap_limit: 0.01
+  log_search_progress: false
+  scaling_factor: 10
+  weights:
+    priority_gain: 100.0
+    coordination_bonus: 50.0
+    asset_availability_bonus: 30.0
+    train_impact_penalty: 25.0
+    downtime_penalty: 10.0
+    resource_penalty: 5.0
+    deferral_penalty: 60.0
+    unserved_critical_penalty: 1500.0
+
+# Train impact weights
+train_impact:
+  passenger_weight: 1.5
+  freight_weight: 1.0
+  high_priority_weight: 3.0
+
+# Multi-department coordination rules
+coordination:
+  max_tasks_per_block: 3
+  safety_buffer_minutes: 15
+  compatible_departments:
+    - [ENGINEERING, S_AND_T]
+    - [ENGINEERING, TRACTION]
+    - [S_AND_T, TRACTION]
+    - [ENGINEERING, S_AND_T, TRACTION]
+
+# File system storage paths
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  synthetic_data_dir: "data/synthetic"
+  models_dir: "models"
+
+# REST API Server configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+
+# Centralized logging configuration
+logging:
+  level: "INFO"
+  log_file: "logs/rail_planner.log"

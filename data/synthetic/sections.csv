@@ -1,0 +1,11 @@
+section_id,name,length_km,tracks,traffic_density
+SEC-NDLS-GZB,New Delhi - Ghaziabad,28.0,4,VERY_HIGH
+SEC-GZB-CNB,Ghaziabad - Kanpur Central,412.0,3,HIGH
+SEC-CNB-PRYJ,Kanpur Central - Prayagraj,194.0,3,HIGH
+SEC-PRYJ-DDU,Prayagraj - Pt DD Upadhyaya,153.0,3,VERY_HIGH
+SEC-DDU-PNBE,Pt DD Upadhyaya - Patna,212.0,2,HIGH
+SEC-BCT-ST,Mumbai Central - Surat,263.0,3,VERY_HIGH
+SEC-ST-BRC,Surat - Vadodara,129.0,3,HIGH
+SEC-BRC-ADI,Vadodara - Ahmedabad,100.0,2,HIGH
+SEC-MAS-RU,Chennai Central - Renigunta,137.0,2,MEDIUM
+SEC-HWH-KGP,Howrah - Kharagpur,115.0,3,VERY_HIGH
