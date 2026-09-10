@@ -40,10 +40,9 @@ export default function Dashboard() {
     <>
       {showLoader && (
         <Loader
-          actualProgress={100}
+          durationMs={5000}
           onComplete={() => setShowLoader(false)}
-          brandLeft="SMART"
-          brandRight="RAIL"
+          brandText="SMART RAIL"
         />
       )}
       <PageBody>
