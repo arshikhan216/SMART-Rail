@@ -32,6 +32,8 @@ export default function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="tasks" element={<MaintenanceTasks />} />
         <Route path="tasks/:taskId" element={<MaintenanceIntelligence />} />
+        <Route path="predictions" element={<PredictionOverview />} />
+        <Route path="asset-intelligence/:assetId" element={<AssetIntelligence />} />
         <Route path="planning" element={<BlockPlanning />} />
         <Route path="map" element={<OperationalMap />} />
         <Route path="execution" element={<Execution />} />

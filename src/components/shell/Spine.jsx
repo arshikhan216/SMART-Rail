@@ -1,4 +1,5 @@
 import {
+  BrainCircuit,
   CalendarClock,
   ChartLine,
   FileText,
@@ -23,6 +24,7 @@ const ICONS = {
   Map,
   RadioTower,
   ChartLine,
+  BrainCircuit,
 }
 
 /* design.md § Master Grid — a fixed 64px collapsed / 240px expanded
