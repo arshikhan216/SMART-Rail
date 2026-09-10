@@ -7,6 +7,8 @@ import Execution from './pages/Execution'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import MaintenanceIntelligence from './pages/MaintenanceIntelligence'
+import AssetIntelligence from './pages/AssetIntelligence'
+import PredictionOverview from './pages/PredictionOverview'
 import MaintenanceTasks from './pages/MaintenanceTasks'
 import OperationalMap from './pages/OperationalMap'
 import PlanValidation from './pages/PlanValidation'
@@ -16,6 +18,14 @@ export default function App() {
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
+
+      {/* Dedicated ML/AI Frontend Layer Routes */}
+      <Route path="/maintenance-intelligence" element={<MaintenanceIntelligence />} />
+      <Route path="/maintenance-intelligence/:taskId" element={<MaintenanceIntelligence />} />
+      <Route path="/asset-intelligence" element={<AssetIntelligence />} />
+      <Route path="/asset-intelligence/:assetId" element={<AssetIntelligence />} />
+      <Route path="/predictions" element={<PredictionOverview />} />
+      <Route path="/predictions/:predictionId" element={<PredictionOverview />} />
 
       <Route path="/app" element={<AppShell />}>
         <Route index element={<Navigate to="/app/dashboard" replace />} />
@@ -33,7 +43,8 @@ export default function App() {
         <Route path="/plan-validation" element={<PlanValidation />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/" replace />} />
+      <Route path="*" element={<Navigate to="/maintenance-intelligence" replace />} />
     </Routes>
   )
 }
+
