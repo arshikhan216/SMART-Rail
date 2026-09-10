@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Sparkles, TrainFront } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 export default function Loader({
   durationMs = 5000,
@@ -10,7 +10,7 @@ export default function Loader({
   const [displayedProgress, setDisplayedProgress] = useState(0);
   const [wavePhase, setWavePhase] = useState(0);
 
-  // 1. Smooth 5.0-second progressive timer
+  // 1. Precise 5.0-second smooth progressive timer (0% to 100%)
   useEffect(() => {
     const startTime = performance.now();
     let animationFrameId;
@@ -19,7 +19,7 @@ export default function Loader({
       const elapsed = now - startTime;
       const progress = Math.min(100, (elapsed / durationMs) * 100);
       setDisplayedProgress(progress);
-      setWavePhase((prev) => (prev + 0.08) % (Math.PI * 4));
+      setWavePhase((prev) => (prev + 0.09) % (Math.PI * 4));
 
       if (progress < 100) {
         animationFrameId = requestAnimationFrame(updateTimer);
@@ -44,45 +44,37 @@ export default function Loader({
     }
   }, [displayedProgress, onComplete]);
 
-  // 3. Dynamic Wave Math (Rising liquid from 100% to 0% with dual wave oscillation)
+  // 3. True Bottom-to-Top Expanding Liquid Wave Fill
+  // Water level goes from 100% (empty bottom) down to 0% (fully submerged top)
   const waterLevel = 100 - displayedProgress;
-  const isMid = displayedProgress > 2 && displayedProgress < 98;
-  const waveAmp = isMid ? 5.5 : 0;
-  const bottomAmp = isMid ? 3.5 : 0;
+  const isMid = displayedProgress > 1 && displayedProgress < 99;
+  const waveAmp = isMid ? 4.5 : 0;
 
-  // Primary top rising wave
+  // Primary rolling wave crest along the top boundary of the liquid
   const t0 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 0) * waveAmp));
-  const t1 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 1.2) * waveAmp));
-  const t2 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 2.4) * waveAmp));
-  const t3 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 3.6) * waveAmp));
-  const t4 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 4.8) * waveAmp));
-  const t5 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 6.0) * waveAmp));
-  const t6 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 7.2) * waveAmp));
+  const t1 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 1.1) * waveAmp));
+  const t2 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 2.2) * waveAmp));
+  const t3 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 3.3) * waveAmp));
+  const t4 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 4.4) * waveAmp));
+  const t5 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 5.5) * waveAmp));
+  const t6 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 6.6) * waveAmp));
 
-  // Secondary counter-sliding wave
-  const s0 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 0) * waveAmp));
-  const s1 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 1.2) * waveAmp));
-  const s2 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 2.4) * waveAmp));
-  const s3 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 3.6) * waveAmp));
-  const s4 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 4.8) * waveAmp));
-  const s5 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 6.0) * waveAmp));
-  const s6 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.3 + 7.2) * waveAmp));
+  // Secondary translucent ripple layer
+  const s0 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 0) * (waveAmp * 0.8)));
+  const s1 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 1.1) * (waveAmp * 0.8)));
+  const s2 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 2.2) * (waveAmp * 0.8)));
+  const s3 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 3.3) * (waveAmp * 0.8)));
+  const s4 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 4.4) * (waveAmp * 0.8)));
+  const s5 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 5.5) * (waveAmp * 0.8)));
+  const s6 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 6.6) * (waveAmp * 0.8)));
 
-  // Dynamic bottom ripple oscillation
-  const b0 = 100 - (isMid ? Math.sin(wavePhase * 0.8 + 0) * bottomAmp : 0);
-  const b1 = 100 - (isMid ? Math.sin(wavePhase * 0.8 + 1.5) * bottomAmp : 0);
-  const b2 = 100 - (isMid ? Math.sin(wavePhase * 0.8 + 3.0) * bottomAmp : 0);
-  const b3 = 100 - (isMid ? Math.sin(wavePhase * 0.8 + 4.5) * bottomAmp : 0);
-  const b4 = 100 - (isMid ? Math.sin(wavePhase * 0.8 + 6.0) * bottomAmp : 0);
-
-  // Main liquid body clipPath (fills from bottom to top wave)
-  const primaryWaveClip = `polygon(
+  // Solid Liquid Fill: polygon covers from top wave down to 100% (bottom of letters)
+  const primaryLiquidClip = `polygon(
     0% ${t0.toFixed(2)}%, 16% ${t1.toFixed(2)}%, 33% ${t2.toFixed(2)}%, 50% ${t3.toFixed(2)}%, 66% ${t4.toFixed(2)}%, 83% ${t5.toFixed(2)}%, 100% ${t6.toFixed(2)}%,
-    100% ${b4.toFixed(2)}%, 75% ${b3.toFixed(2)}%, 50% ${b2.toFixed(2)}%, 25% ${b1.toFixed(2)}%, 0% ${b0.toFixed(2)}%
+    100% 100%, 0% 100%
   )`;
 
-  // Secondary layer clipPath (creates dual-sliding wave depth)
-  const secondaryWaveClip = `polygon(
+  const secondaryLiquidClip = `polygon(
     0% ${s0.toFixed(2)}%, 16% ${s1.toFixed(2)}%, 33% ${s2.toFixed(2)}%, 50% ${s3.toFixed(2)}%, 66% ${s4.toFixed(2)}%, 83% ${s5.toFixed(2)}%, 100% ${s6.toFixed(2)}%,
     100% 100%, 0% 100%
   )`;
@@ -107,7 +99,7 @@ export default function Loader({
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          background: radial-gradient(circle at center, #222222 0%, #161616 65%, #0D0D0D 100%);
+          background: radial-gradient(circle at center, #232323 0%, #171717 65%, #0E0E0E 100%);
           color: #F2EFE7;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
@@ -128,14 +120,14 @@ export default function Loader({
           position: relative;
         }
 
-        /* Ambient golden radial aura */
+        /* Ambient golden glow behind text */
         .loader-ambient-glow {
           position: absolute;
-          width: 500px;
-          height: 180px;
-          background: radial-gradient(ellipse at center, rgba(242, 183, 89, 0.18) 0%, rgba(242, 183, 89, 0.05) 50%, transparent 75%);
+          width: 600px;
+          height: 220px;
+          background: radial-gradient(ellipse at center, rgba(242, 183, 89, 0.22) 0%, rgba(242, 183, 89, 0.06) 50%, transparent 75%);
           pointer-events: none;
-          filter: blur(20px);
+          filter: blur(25px);
         }
 
         .loader-text-wrapper {
@@ -143,74 +135,74 @@ export default function Loader({
           display: inline-block;
         }
 
-        /* Base Muted Ghost Text */
+        /* 1. Base Muted Outline Text */
         .loader-text-base {
-          font-size: clamp(3rem, 7.5vw, 5.5rem);
+          font-size: clamp(3.2rem, 8vw, 5.8rem);
           font-weight: 900;
           letter-spacing: 0.16em;
-          color: rgba(255, 255, 255, 0.12);
+          color: rgba(255, 255, 255, 0.14);
           text-transform: uppercase;
           margin: 0;
           white-space: nowrap;
         }
 
-        /* Primary Dynamic Liquid Wave Fill */
-        .loader-text-primary-wave {
+        /* 2. Secondary Translucent Liquid Fill Layer */
+        .loader-text-secondary-fill {
           position: absolute;
           inset: 0;
-          font-size: clamp(3rem, 7.5vw, 5.5rem);
+          font-size: clamp(3.2rem, 8vw, 5.8rem);
+          font-weight: 900;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          margin: 0;
+          white-space: nowrap;
+          color: #FFDF99;
+          opacity: 0.45;
+          clip-path: ${secondaryLiquidClip} !important;
+          transition: clip-path 0.02s linear;
+          z-index: 1;
+        }
+
+        /* 3. Primary Solid Golden Liquid Fill (Expands Bottom to Top) */
+        .loader-text-primary-fill {
+          position: absolute;
+          inset: 0;
+          font-size: clamp(3.2rem, 8vw, 5.8rem);
           font-weight: 900;
           letter-spacing: 0.16em;
           text-transform: uppercase;
           margin: 0;
           white-space: nowrap;
           color: #F2B759;
-          text-shadow: 0 0 25px rgba(242, 183, 89, 0.6), 0 0 60px rgba(242, 183, 89, 0.3);
-          clip-path: ${primaryWaveClip} !important;
+          text-shadow: 0 0 30px rgba(242, 183, 89, 0.6), 0 0 60px rgba(242, 183, 89, 0.3);
+          clip-path: ${primaryLiquidClip} !important;
           transition: clip-path 0.02s linear;
           z-index: 2;
         }
 
-        /* Secondary Translucent Counter-Sliding Wave Fill */
-        .loader-text-secondary-wave {
+        /* 4. Radiant Liquid Surface Wave Beam Highlight */
+        .loader-text-crest-line {
           position: absolute;
           inset: 0;
-          font-size: clamp(3rem, 7.5vw, 5.5rem);
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          margin: 0;
-          white-space: nowrap;
-          color: #FFD285;
-          opacity: 0.6;
-          clip-path: ${secondaryWaveClip} !important;
-          transition: clip-path 0.02s linear;
-          z-index: 1;
-        }
-
-        /* Top & Bottom Sliding Crest Highlights */
-        .loader-text-crest {
-          position: absolute;
-          inset: 0;
-          font-size: clamp(3rem, 7.5vw, 5.5rem);
+          font-size: clamp(3.2rem, 8vw, 5.8rem);
           font-weight: 900;
           letter-spacing: 0.16em;
           text-transform: uppercase;
           margin: 0;
           white-space: nowrap;
           color: #FFFFFF;
-          opacity: 0.9;
+          opacity: 0.95;
           clip-path: polygon(
-            0% ${Math.min(100, t0 + 1)}%, 100% ${Math.min(100, t6 + 1)}%,
+            0% ${Math.min(100, t0)}%, 100% ${Math.min(100, t6)}%,
             100% ${Math.min(100, t6 + 3.5)}%, 0% ${Math.min(100, t0 + 3.5)}%
           );
-          filter: drop-shadow(0 0 8px #FFFFFF);
+          filter: drop-shadow(0 0 8px #FFF0D0);
           z-index: 3;
           pointer-events: none;
         }
 
         .loader-progress-wrap {
-          margin-top: 36px;
+          margin-top: 40px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -271,17 +263,17 @@ export default function Loader({
         <div className="loader-ambient-glow" />
 
         <div className="loader-text-wrapper">
-          {/* 1. Muted Background Text */}
+          {/* Base Unfilled Muted Text */}
           <h1 className="loader-text-base">{brandText}</h1>
 
-          {/* 2. Secondary Sliding Wave Layer */}
-          <div className="loader-text-secondary-wave" aria-hidden="true">{brandText}</div>
+          {/* Secondary Liquid Wave Depth */}
+          <div className="loader-text-secondary-fill" aria-hidden="true">{brandText}</div>
 
-          {/* 3. Primary Liquid Wave Body Fill (Top & Bottom sliding curves) */}
-          <div className="loader-text-primary-wave" aria-hidden="true">{brandText}</div>
+          {/* Primary Golden Liquid Fill (Expands from bottom 100% up to 0%) */}
+          <div className="loader-text-primary-fill" aria-hidden="true">{brandText}</div>
 
-          {/* 4. Radiant Crest Light Beam */}
-          <div className="loader-text-crest" aria-hidden="true">{brandText}</div>
+          {/* Leading Surface Wave Crest Light Beam */}
+          <div className="loader-text-crest-line" aria-hidden="true">{brandText}</div>
         </div>
       </div>
 
@@ -300,7 +292,7 @@ export default function Loader({
 
         <div className="loader-sliding-rail">
           <span>Corridor: RKMP-BPL Quad Track</span>
-          <span>Dual-Wave Synthesis · 5.0s</span>
+          <span>Full Liquid Rise · 5.0s</span>
         </div>
       </div>
     </div>
