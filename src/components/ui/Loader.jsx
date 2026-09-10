@@ -10,7 +10,7 @@ export default function Loader({
   const [displayedProgress, setDisplayedProgress] = useState(0);
   const [wavePhase, setWavePhase] = useState(0);
 
-  // 1. Precise 5.0-second smooth progressive timer (0% to 100%)
+  // 1. Precise 5.0-second progressive timer (0% to 100%)
   useEffect(() => {
     const startTime = performance.now();
     let animationFrameId;
@@ -44,40 +44,35 @@ export default function Loader({
     }
   }, [displayedProgress, onComplete]);
 
-  // 3. True Bottom-to-Top Expanding Liquid Wave Fill
-  // Water level goes from 100% (empty bottom) down to 0% (fully submerged top)
-  const waterLevel = 100 - displayedProgress;
-  const isMid = displayedProgress > 1 && displayedProgress < 99;
-  const waveAmp = isMid ? 4.5 : 0;
+  // 3. SVG Dimensions & Liquid Rise Math
+  const svgWidth = 900;
+  const svgHeight = 140;
+  
+  // waterY starts at svgHeight (140 = 0% filled at bottom) and moves up to 0 (100% filled at top)
+  const waterY = svgHeight - (displayedProgress / 100) * svgHeight;
+  const isMid = displayedProgress > 0.5 && displayedProgress < 99.5;
+  const waveAmp = isMid ? 5.5 : 0;
 
-  // Primary rolling wave crest along the top boundary of the liquid
-  const t0 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 0) * waveAmp));
-  const t1 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 1.1) * waveAmp));
-  const t2 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 2.2) * waveAmp));
-  const t3 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 3.3) * waveAmp));
-  const t4 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 4.4) * waveAmp));
-  const t5 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 5.5) * waveAmp));
-  const t6 = Math.min(100, Math.max(0, waterLevel + Math.sin(wavePhase + 6.6) * waveAmp));
+  // Generate primary undulating wave curve along the liquid surface
+  const wavePoints = [];
+  const crestPoints = [];
+  for (let x = 0; x <= svgWidth; x += 25) {
+    const y = Math.min(svgHeight, Math.max(0, waterY + Math.sin((x / 65) + wavePhase) * waveAmp));
+    wavePoints.push(`${x},${y.toFixed(2)}`);
+    crestPoints.push(`${x},${(y).toFixed(2)}`);
+  }
 
-  // Secondary translucent ripple layer
-  const s0 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 0) * (waveAmp * 0.8)));
-  const s1 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 1.1) * (waveAmp * 0.8)));
-  const s2 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 2.2) * (waveAmp * 0.8)));
-  const s3 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 3.3) * (waveAmp * 0.8)));
-  const s4 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 4.4) * (waveAmp * 0.8)));
-  const s5 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 5.5) * (waveAmp * 0.8)));
-  const s6 = Math.min(100, Math.max(0, waterLevel + Math.cos(wavePhase * 1.2 + 6.6) * (waveAmp * 0.8)));
+  // Secondary counter-phase wave points
+  const secWavePoints = [];
+  for (let x = 0; x <= svgWidth; x += 25) {
+    const y = Math.min(svgHeight, Math.max(0, waterY + Math.cos((x / 55) - wavePhase * 1.2) * (waveAmp * 0.75)));
+    secWavePoints.push(`${x},${y.toFixed(2)}`);
+  }
 
-  // Solid Liquid Fill: polygon covers from top wave down to 100% (bottom of letters)
-  const primaryLiquidClip = `polygon(
-    0% ${t0.toFixed(2)}%, 16% ${t1.toFixed(2)}%, 33% ${t2.toFixed(2)}%, 50% ${t3.toFixed(2)}%, 66% ${t4.toFixed(2)}%, 83% ${t5.toFixed(2)}%, 100% ${t6.toFixed(2)}%,
-    100% 100%, 0% 100%
-  )`;
-
-  const secondaryLiquidClip = `polygon(
-    0% ${s0.toFixed(2)}%, 16% ${s1.toFixed(2)}%, 33% ${s2.toFixed(2)}%, 50% ${s3.toFixed(2)}%, 66% ${s4.toFixed(2)}%, 83% ${s5.toFixed(2)}%, 100% ${s6.toFixed(2)}%,
-    100% 100%, 0% 100%
-  )`;
+  // Complete solid liquid body path: Top wave line -> Bottom right -> Bottom left -> Close
+  const primaryLiquidPath = `M 0,${svgHeight} L 0,${waterY.toFixed(2)} L ${wavePoints.join(" L ")} L ${svgWidth},${svgHeight} Z`;
+  const secondaryLiquidPath = `M 0,${svgHeight} L 0,${waterY.toFixed(2)} L ${secWavePoints.join(" L ")} L ${svgWidth},${svgHeight} Z`;
+  const crestLinePath = `M ${crestPoints.join(" L ")}`;
 
   const getStatusText = (progress) => {
     if (progress < 20) return "Ingesting RKMP-BPL Quad-Track Telemetry...";
@@ -99,7 +94,7 @@ export default function Loader({
           flex-direction: column;
           align-items: center;
           justify-content: center;
-          background: radial-gradient(circle at center, #232323 0%, #171717 65%, #0E0E0E 100%);
+          background: radial-gradient(circle at center, #222222 0%, #171717 65%, #0B0B0B 100%);
           color: #F2EFE7;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
@@ -118,97 +113,38 @@ export default function Loader({
           justify-content: center;
           user-select: none;
           position: relative;
+          width: 92%;
+          max-width: 940px;
         }
 
         /* Ambient golden glow behind text */
         .loader-ambient-glow {
           position: absolute;
-          width: 600px;
+          width: 650px;
           height: 220px;
           background: radial-gradient(ellipse at center, rgba(242, 183, 89, 0.22) 0%, rgba(242, 183, 89, 0.06) 50%, transparent 75%);
           pointer-events: none;
-          filter: blur(25px);
+          filter: blur(30px);
         }
 
-        .loader-text-wrapper {
+        .loader-svg-wrap {
+          width: 100%;
+          height: auto;
+          overflow: visible;
           position: relative;
-          display: inline-block;
-        }
-
-        /* 1. Base Muted Outline Text */
-        .loader-text-base {
-          font-size: clamp(3.2rem, 8vw, 5.8rem);
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          color: rgba(255, 255, 255, 0.14);
-          text-transform: uppercase;
-          margin: 0;
-          white-space: nowrap;
-        }
-
-        /* 2. Secondary Translucent Liquid Fill Layer */
-        .loader-text-secondary-fill {
-          position: absolute;
-          inset: 0;
-          font-size: clamp(3.2rem, 8vw, 5.8rem);
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          margin: 0;
-          white-space: nowrap;
-          color: #FFDF99;
-          opacity: 0.45;
-          clip-path: ${secondaryLiquidClip} !important;
-          transition: clip-path 0.02s linear;
-          z-index: 1;
-        }
-
-        /* 3. Primary Solid Golden Liquid Fill (Expands Bottom to Top) */
-        .loader-text-primary-fill {
-          position: absolute;
-          inset: 0;
-          font-size: clamp(3.2rem, 8vw, 5.8rem);
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          margin: 0;
-          white-space: nowrap;
-          color: #F2B759;
-          text-shadow: 0 0 30px rgba(242, 183, 89, 0.6), 0 0 60px rgba(242, 183, 89, 0.3);
-          clip-path: ${primaryLiquidClip} !important;
-          transition: clip-path 0.02s linear;
           z-index: 2;
         }
 
-        /* 4. Radiant Liquid Surface Wave Beam Highlight */
-        .loader-text-crest-line {
-          position: absolute;
-          inset: 0;
-          font-size: clamp(3.2rem, 8vw, 5.8rem);
-          font-weight: 900;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          margin: 0;
-          white-space: nowrap;
-          color: #FFFFFF;
-          opacity: 0.95;
-          clip-path: polygon(
-            0% ${Math.min(100, t0)}%, 100% ${Math.min(100, t6)}%,
-            100% ${Math.min(100, t6 + 3.5)}%, 0% ${Math.min(100, t0 + 3.5)}%
-          );
-          filter: drop-shadow(0 0 8px #FFF0D0);
-          z-index: 3;
-          pointer-events: none;
-        }
-
         .loader-progress-wrap {
-          margin-top: 40px;
+          margin-top: 36px;
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 12px;
           max-width: 440px;
           width: 90%;
+          position: relative;
+          z-index: 2;
         }
 
         .loader-bar-bg {
@@ -262,19 +198,80 @@ export default function Loader({
       <div className="loader-main">
         <div className="loader-ambient-glow" />
 
-        <div className="loader-text-wrapper">
-          {/* Base Unfilled Muted Text */}
-          <h1 className="loader-text-base">{brandText}</h1>
+        <svg viewBox="0 0 900 140" className="loader-svg-wrap">
+          <defs>
+            {/* Text Clip Mask (Masks only the letters SMART RAIL) */}
+            <clipPath id="smartrail-text-clip">
+              <text
+                x="450"
+                y="85"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontSize="76"
+                fontWeight="900"
+                letterSpacing="0.16em"
+                fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+              >
+                {brandText}
+              </text>
+            </clipPath>
 
-          {/* Secondary Liquid Wave Depth */}
-          <div className="loader-text-secondary-fill" aria-hidden="true">{brandText}</div>
+            {/* Glowing Golden Liquid Gradient */}
+            <linearGradient id="liquid-gold-grad" x1="0%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stopColor="#D99736" />
+              <stop offset="70%" stopColor="#F2B759" />
+              <stop offset="100%" stopColor="#FFE09E" />
+            </linearGradient>
 
-          {/* Primary Golden Liquid Fill (Expands from bottom 100% up to 0%) */}
-          <div className="loader-text-primary-fill" aria-hidden="true">{brandText}</div>
+            {/* Liquid Surface Glow Filter */}
+            <filter id="liquid-glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-          {/* Leading Surface Wave Crest Light Beam */}
-          <div className="loader-text-crest-line" aria-hidden="true">{brandText}</div>
-        </div>
+          {/* 1. Base Muted Unfilled Text */}
+          <text
+            x="450"
+            y="85"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize="76"
+            fontWeight="900"
+            letterSpacing="0.16em"
+            fill="rgba(255, 255, 255, 0.12)"
+            fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+          >
+            {brandText}
+          </text>
+
+          {/* 2. Liquid Layer Clipped INSIDE the Text Mask */}
+          <g clipPath="url(#smartrail-text-clip)">
+            {/* Solid Golden Liquid Base expanding from bottom up */}
+            <rect x="0" y={waterY} width={svgWidth} height={svgHeight - waterY} fill="url(#liquid-gold-grad)" />
+
+            {/* Secondary Translucent Counter-Wave */}
+            <path d={secondaryLiquidPath} fill="#FFDFA3" opacity="0.4" />
+
+            {/* Primary Undulating Wave Body */}
+            <path d={primaryLiquidPath} fill="url(#liquid-gold-grad)" filter="url(#liquid-glow)" />
+
+            {/* Leading Wave Crest Line */}
+            {isMid && (
+              <path
+                d={crestLinePath}
+                stroke="#FFFFFF"
+                strokeWidth="2.5"
+                fill="none"
+                opacity="0.9"
+                strokeLinecap="round"
+              />
+            )}
+          </g>
+        </svg>
       </div>
 
       <div className="loader-progress-wrap">
