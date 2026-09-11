@@ -1,118 +1,283 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Cpu, Shield, Clock, Flame, Activity, ArrowRight, RefreshCw, Sparkles, Filter } from 'lucide-react'
-import RiskLevelBadge from '../components/risk/RiskLevelBadge'
-import ModelMetadata from '../components/model/ModelMetadata'
-import ModelStatus from '../components/model/ModelStatus'
+import {
+  Activity,
+  ArrowRight,
+  BrainCircuit,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Cpu,
+  Filter,
+  Layers,
+  RefreshCw,
+  ShieldAlert,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  TrendingDown,
+  Wrench,
+} from 'lucide-react'
+import { useHeader } from '../components/shell/AppShell'
+import PageHeader, { PageBody } from '../components/shell/PageHeader'
+import Button from '../components/ui/Button'
+import { Chip, Dot, Ref, StatusChip } from '../components/ui/Chip'
+import { Eyebrow, Panel, PanelHeader } from '../components/ui/Panel'
 import { mockTasks, mockAssets } from '../data/mockIntelligenceData'
+import { system } from '../data/smartRail'
+
+const RISK_TONE = {
+  CRITICAL: 'urgent',
+  HIGH: 'warning',
+  MEDIUM: 'neutral',
+  LOW: 'nominal',
+}
 
 export default function PredictionOverview() {
-  const [filter, setFilter] = useState('ALL')
+  useHeader(['Asset & Risk Intelligence'])
 
-  const filteredTasks = mockTasks.filter(t => {
+  const [filter, setFilter] = useState('ALL')
+  const [showTechnicalDetails, setShowTechnicalDetails] = useState(false)
+
+  const filteredTasks = mockTasks.filter((t) => {
     if (filter === 'CRITICAL') return t.risk_level === 'CRITICAL'
     if (filter === 'HIGH') return t.risk_level === 'HIGH'
+    if (filter === 'MEDIUM') return t.risk_level === 'MEDIUM'
     return true
   })
 
   return (
-    <div className="min-h-screen bg-[#F2EFE7] text-[#252525] p-4 md:p-6 lg:p-8">
-      <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E5E1D8] pb-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#767676] mb-1">
-            <span className="text-[#252525] font-semibold">SMART-Rail ML Telemetry</span>
-            <span>/</span>
-            <span>Prediction Registry</span>
+    <PageBody>
+      <PageHeader
+        title="Asset & Risk Intelligence"
+        badge={
+          <>
+            <Chip tone="neutral">RKMP-BPL Corridor</Chip>
+            <Chip tone="nominal" dot>
+              Model Status: Verified Active
+            </Chip>
+          </>
+        }
+        subtitle="AI-assisted risk assessment and degradation intelligence across track, OHE, and signaling assets."
+        actions={
+          <>
+            <Button
+              variant="secondary"
+              onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
+            >
+              <Cpu className="size-3.5" strokeWidth={2} />
+              {showTechnicalDetails ? 'Hide ML Telemetry' : 'Technical AI Diagnostics'}
+              {showTechnicalDetails ? (
+                <ChevronUp className="size-3.5 ml-1" />
+              ) : (
+                <ChevronDown className="size-3.5 ml-1" />
+              )}
+            </Button>
+            <Button to="/app/planning" variant="primary" uppercase>
+              <Layers className="size-3.5" strokeWidth={2.25} />
+              Plan Block Window
+            </Button>
+          </>
+        }
+      />
+
+      {/* Operational KPI Summary */}
+      <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Monitored Assets</Eyebrow>
+            <Activity className="size-4 text-accent" strokeWidth={2} />
           </div>
-          <h1 className="text-2xl font-extrabold text-[#252525] tracking-tight">
-            Machine Learning Inferences & Health Scores
-          </h1>
-          <p className="text-xs text-[#767676] font-mono mt-0.5">
-            Real-time inference queue for RKMP-BPL corridor assets and scheduled maintenance windows.
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-ink">1,137</span>
+            <Chip tone="nominal">100% Synced</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Track, Turnout, OHE &amp; Signal sensors
           </p>
-        </div>
+        </Panel>
 
-        <div className="flex items-center gap-3">
-          <ModelStatus latency="42ms" isFallback={false} />
-        </div>
-      </header>
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>High Risk Flags</Eyebrow>
+            <ShieldAlert className="size-4 text-urgent" strokeWidth={2} />
+          </div>
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-urgent">12</span>
+            <Chip tone="urgent">Urgent Intervention</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Block recommended within 7–14 days
+          </p>
+        </Panel>
 
-      {/* KPI Highlights */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white border border-[#E5E1D8] p-4 rounded-xl shadow-sm">
-          <span className="text-[10px] font-mono text-[#767676] uppercase block">Monitored Assets</span>
-          <span className="text-2xl font-extrabold font-mono text-[#252525] mt-1 block">1,137</span>
-          <span className="text-[10px] text-emerald-600 font-mono">100% telemetry synced</span>
-        </div>
-        <div className="bg-white border border-[#E5E1D8] p-4 rounded-xl shadow-sm">
-          <span className="text-[10px] font-mono text-red-800 uppercase block">Critical Risk Flags</span>
-          <span className="text-2xl font-extrabold font-mono text-red-600 mt-1 block">12</span>
-          <span className="text-[10px] text-red-600 font-mono">Immediate block recommended</span>
-        </div>
-        <div className="bg-white border border-[#E5E1D8] p-4 rounded-xl shadow-sm">
-          <span className="text-[10px] font-mono text-[#767676] uppercase block">Average Model AUC</span>
-          <span className="text-2xl font-extrabold font-mono text-[#252525] mt-1 block">0.942</span>
-          <span className="text-[10px] text-[#F2B759] font-mono font-medium">Brier calibrated</span>
-        </div>
-        <div className="bg-white border border-[#E5E1D8] p-4 rounded-xl shadow-sm">
-          <span className="text-[10px] font-mono text-[#767676] uppercase block">Corridor Delay Saved</span>
-          <span className="text-2xl font-extrabold font-mono text-emerald-700 mt-1 block">41.7%</span>
-          <span className="text-[10px] text-emerald-700 font-mono">Via CP-SAT optimization</span>
-        </div>
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Corridor Delay Saved</Eyebrow>
+            <TrendingDown className="size-4 text-nominal" strokeWidth={2} />
+          </div>
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-nominal">41.7%</span>
+            <Chip tone="nominal">-48 min/day</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Via multi-department CP-SAT optimization
+          </p>
+        </Panel>
+
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Prediction Reliability</Eyebrow>
+            <ShieldCheck className="size-4 text-nominal" strokeWidth={2} />
+          </div>
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-ink">99.4%</span>
+            <Chip tone="neutral">Brier: 0.042</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Validated against historical inspection data
+          </p>
+        </Panel>
       </div>
 
-      {/* Tasks Inferences Table */}
-      <div className="bg-white border border-[#E5E1D8] rounded-xl p-5 shadow-sm mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-          <h3 className="text-sm font-semibold text-[#252525]">Active Task Inferences</h3>
-          <div className="flex items-center gap-2">
-            <Filter className="w-3.5 h-3.5 text-[#767676]" />
-            <button
-              onClick={() => setFilter('ALL')}
-              className={`px-2.5 py-1 text-xs font-mono rounded ${filter === 'ALL' ? 'bg-[#252525] text-white' : 'bg-[#F9F8F5] text-[#767676]'}`}
-            >
-              All ({mockTasks.length})
-            </button>
-            <button
-              onClick={() => setFilter('CRITICAL')}
-              className={`px-2.5 py-1 text-xs font-mono rounded ${filter === 'CRITICAL' ? 'bg-red-600 text-white' : 'bg-[#F9F8F5] text-[#767676]'}`}
-            >
-              Critical
-            </button>
+      {/* Optional Technical AI Diagnostics Accordion */}
+      {showTechnicalDetails && (
+        <Panel className="mt-4 border-accent-line bg-surface p-4 animate-in fade-in-50">
+          <PanelHeader
+            dense
+            title="Technical AI / ML Model Registry & Observability"
+            subtitle="Underlying model telemetry and SHAP explainability parameters for data engineers."
+          />
+          <div className="grid gap-4 p-4 lg:grid-cols-3">
+            <div className="rounded border border-line bg-canvas p-3">
+              <Eyebrow className="mb-1">Risk Classifier</Eyebrow>
+              <p className="text-body-md font-semibold text-ink">Random Forest Classifier (v2.0)</p>
+              <dl className="mt-2 space-y-1 text-body-sm text-ink-muted">
+                <div className="flex justify-between">
+                  <span>ROC-AUC:</span>
+                  <span className="font-mono text-ink font-semibold">1.000</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Explainability:</span>
+                  <span className="font-mono text-accent">TreeSHAP Fast Attributions</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Inference Latency:</span>
+                  <span className="font-mono text-ink">18ms</span>
+                </div>
+              </dl>
+            </div>
+
+            <div className="rounded border border-line bg-canvas p-3">
+              <Eyebrow className="mb-1">Delay Regressor</Eyebrow>
+              <p className="text-body-md font-semibold text-ink">Quantile Gradient Booster (v2.0)</p>
+              <dl className="mt-2 space-y-1 text-body-sm text-ink-muted">
+                <div className="flex justify-between">
+                  <span>MAE (Mean Absolute Error):</span>
+                  <span className="font-mono text-ink font-semibold">2.31 min</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>R² Score:</span>
+                  <span className="font-mono text-ink">0.8688</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Prediction Horizon:</span>
+                  <span className="font-mono text-ink">P10 / P50 / P90 bounds</span>
+                </div>
+              </dl>
+            </div>
+
+            <div className="rounded border border-line bg-canvas p-3">
+              <Eyebrow className="mb-1">Combinatorial Solver</Eyebrow>
+              <p className="text-body-md font-semibold text-ink">Google OR-Tools CP-SAT (v9.8)</p>
+              <dl className="mt-2 space-y-1 text-body-sm text-ink-muted">
+                <div className="flex justify-between">
+                  <span>Solvability Verdict:</span>
+                  <span className="font-mono text-nominal font-semibold">OPTIMAL / FEASIBLE</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Deterministic Invariants:</span>
+                  <span className="font-mono text-ink">4 Hard Safety Invariants</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Joint Bundling Savings:</span>
+                  <span className="font-mono text-accent">+1.5 to 2.5 hrs saved</span>
+                </div>
+              </dl>
+            </div>
           </div>
-        </div>
+        </Panel>
+      )}
+
+      {/* Asset Maintenance Prioritization Register */}
+      <Panel className="mt-4">
+        <PanelHeader
+          title="Corridor Asset Risk & Prioritization Queue"
+          subtitle="AI-calculated risk scores and recommended maintenance actions ordered by operational urgency."
+          actions={
+            <div className="flex items-center gap-1.5">
+              <Filter className="size-3.5 text-ink-muted mr-1" />
+              {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM'].map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFilter(f)}
+                  className={[
+                    'px-2.5 py-1 text-label-sm uppercase rounded cursor-pointer transition-colors',
+                    filter === f
+                      ? 'bg-ink text-surface font-semibold'
+                      : 'bg-canvas text-ink-muted hover:text-ink hover:bg-spine-hover',
+                  ].join(' ')}
+                >
+                  {f === 'ALL' ? `All (${mockTasks.length})` : f}
+                </button>
+              ))}
+            </div>
+          }
+        />
 
         <div className="overflow-x-auto">
-          <table className="w-full text-xs font-mono text-left">
+          <table className="w-full text-left text-body-md">
             <thead>
-              <tr className="border-b border-[#E5E1D8] text-[10px] text-[#767676] uppercase">
-                <th className="pb-2">Task ID</th>
-                <th className="pb-2">Operation & Section</th>
-                <th className="pb-2">Predicted Risk</th>
-                <th className="pb-2">Priority</th>
-                <th className="pb-2">Duration (P50)</th>
-                <th className="pb-2">Action</th>
+              <tr className="border-b border-line bg-canvas text-label-sm uppercase text-ink-muted">
+                <th className="px-4 py-2.5">Task ID</th>
+                <th className="px-4 py-2.5">Asset &amp; Maintenance Scope</th>
+                <th className="px-4 py-2.5">Assessed Risk</th>
+                <th className="px-4 py-2.5">Operational Priority</th>
+                <th className="px-4 py-2.5">Est. Duration</th>
+                <th className="px-4 py-2.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#F2EFE7]">
+            <tbody className="divide-y divide-line">
               {filteredTasks.map((t) => (
-                <tr key={t.id} className="hover:bg-[#F9F8F5]">
-                  <td className="py-3 font-bold text-[#252525]">{t.id}</td>
-                  <td className="py-3">
-                    <span className="font-semibold text-[#252525] block">{t.title}</span>
-                    <span className="text-[11px] text-[#767676]">{t.track_section} · {t.asset_id}</span>
+                <tr key={t.id} className="hover:bg-canvas/60 transition-colors">
+                  <td className="px-4 py-3">
+                    <Ref>{t.id}</Ref>
                   </td>
-                  <td className="py-3">
-                    <RiskLevelBadge level={t.risk_level} size="sm" />
+                  <td className="px-4 py-3">
+                    <p className="font-semibold text-ink">{t.title}</p>
+                    <p className="text-body-sm text-ink-muted">
+                      {t.track_section} · <span className="font-mono text-ink-subtle">{t.asset_id}</span>
+                    </p>
                   </td>
-                  <td className="py-3 font-bold text-[#252525]">{t.priority_score} pts</td>
-                  <td className="py-3 text-[#767676]">{t.duration_p50}m</td>
-                  <td className="py-3">
+                  <td className="px-4 py-3">
+                    <StatusChip tone={RISK_TONE[t.risk_level] || 'neutral'}>
+                      {t.risk_level} RISK ({(t.predicted_risk_probability * 100).toFixed(0)}%)
+                    </StatusChip>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="font-dense font-semibold text-ink">{t.priority_score}</span>
+                    <span className="text-body-sm text-ink-muted"> / 100</span>
+                  </td>
+                  <td className="px-4 py-3 font-dense text-ink-muted">
+                    {t.duration_p50} min
+                  </td>
+                  <td className="px-4 py-3 text-right">
                     <Link
-                      to={`/maintenance-intelligence/${t.id}`}
-                      className="inline-flex items-center gap-1 px-3 py-1 bg-[#F2B759] text-[#252525] font-semibold rounded text-xs hover:opacity-90 transition-opacity"
+                      to={`/app/tasks/${t.id}`}
+                      className="inline-flex items-center gap-1.5 rounded border border-line bg-surface px-3 py-1 text-label-sm uppercase text-ink hover:bg-spine-hover hover:border-line-elevated transition-colors"
                     >
-                      Inspect ML Inferences <ArrowRight className="w-3.5 h-3.5" />
+                      Decision Support <ArrowRight className="size-3" />
                     </Link>
                   </td>
                 </tr>
@@ -120,9 +285,8 @@ export default function PredictionOverview() {
             </tbody>
           </table>
         </div>
-      </div>
-
-      <ModelMetadata />
-    </div>
+      </Panel>
+    </PageBody>
   )
 }
+

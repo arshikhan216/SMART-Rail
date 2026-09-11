@@ -1,101 +1,252 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Activity, ShieldAlert, Cpu, Calendar, RefreshCw, Sparkles, TrendingUp } from 'lucide-react'
-import RiskGauge from '../components/risk/RiskGauge'
-import FeatureImportanceChart from '../components/explanation/FeatureImportanceChart'
-import RiskExplanation from '../components/explanation/RiskExplanation'
-import AssetImpactIndicator from '../components/impact/AssetImpactIndicator'
-import ModelMetadata from '../components/model/ModelMetadata'
-import ModelStatus from '../components/model/ModelStatus'
-import { mockAssets } from '../data/mockIntelligenceData'
+import {
+  Activity,
+  ArrowLeft,
+  CalendarClock,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Clock,
+  Cpu,
+  Flame,
+  Layers,
+  ShieldAlert,
+  ShieldCheck,
+  Sparkles,
+  TrendingDown,
+  TrendingUp,
+  Wrench,
+} from 'lucide-react'
+import { useHeader } from '../components/shell/AppShell'
+import PageHeader, { PageBody } from '../components/shell/PageHeader'
+import Button from '../components/ui/Button'
+import { Chip, Dot, Ref, StatusChip } from '../components/ui/Chip'
+import { Eyebrow, Panel, PanelHeader } from '../components/ui/Panel'
+import { mockAssets, mockTasks } from '../data/mockIntelligenceData'
+import { system } from '../data/smartRail'
+
+const RISK_TONE = {
+  CRITICAL: 'urgent',
+  HIGH: 'warning',
+  MEDIUM: 'neutral',
+  LOW: 'nominal',
+}
 
 export default function AssetIntelligence() {
   const { assetId = 'TRK-RKMP-042' } = useParams()
-  const asset = mockAssets.find(a => a.id === assetId) || mockAssets[0]
+  useHeader(['Corridor Assets', assetId, 'Degradation Intelligence'])
+
+  const [showTechnicalDetails, setShowTechnicalDetails] = useState(false)
+  const asset = mockAssets.find((a) => a.id === assetId) || mockAssets[0]
 
   return (
-    <div className="min-h-screen bg-[#F2EFE7] text-[#252525] p-4 md:p-6 lg:p-8">
-      <header className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#E5E1D8] pb-4">
-        <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#767676] mb-1">
-            <Link to="/app/map" className="hover:text-[#252525] flex items-center gap-1">
-              <ArrowLeft className="w-3.5 h-3.5" /> Corridor Assets
-            </Link>
-            <span>/</span>
-            <span className="text-[#252525] font-semibold">Asset Degradation Intelligence</span>
-            <span>/</span>
-            <span>{asset.id}</span>
-          </div>
+    <PageBody>
+      <PageHeader
+        title={asset.name}
+        badge={
+          <>
+            <Ref>{asset.id}</Ref>
+            <StatusChip tone={RISK_TONE[asset.risk_level] || 'urgent'}>
+              {asset.risk_level} RISK
+            </StatusChip>
+            <Chip tone="neutral">◆ {system.disclaimer}</Chip>
+          </>
+        }
+        subtitle={`Location: ${asset.location} · Commissioned: ${asset.commissioned} · Cumulative Load: ${asset.cumulative_load}`}
+        actions={
+          <>
+            <Button to="/app/map" variant="secondary">
+              <ArrowLeft className="size-3.5" strokeWidth={2} />
+              Corridor Map
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowTechnicalDetails(!showTechnicalDetails)}
+            >
+              <Cpu className="size-3.5" strokeWidth={2} />
+              {showTechnicalDetails ? 'Hide Telemetry' : 'Technical AI Diagnostics'}
+              {showTechnicalDetails ? (
+                <ChevronUp className="size-3.5 ml-1" />
+              ) : (
+                <ChevronDown className="size-3.5 ml-1" />
+              )}
+            </Button>
+            <Button to="/app/planning" variant="primary" uppercase>
+              <CalendarClock className="size-3.5" strokeWidth={2.25} />
+              Schedule Maintenance Block
+            </Button>
+          </>
+        }
+      />
 
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-extrabold text-[#252525]">{asset.name}</h1>
-            <span className="px-2.5 py-0.5 text-xs font-mono font-bold bg-[#252525] text-white rounded">
-              {asset.type}
-            </span>
+      {/* Asset KPI Row */}
+      <div className="grid gap-2.5 sm:grid-cols-2 xl:grid-cols-4">
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Current Health Index</Eyebrow>
+            <Activity className="size-4 text-warning" strokeWidth={2} />
           </div>
-          <p className="text-xs text-[#767676] font-mono mt-0.5">
-            Location: {asset.location} · Commissioned: {asset.commissioned} · Cumulative Load: {asset.cumulative_load}
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-ink">{asset.health_score}</span>
+            <span className="text-body-md text-ink-muted">/ 100</span>
+            <Chip tone="warning">Degraded</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Projected +41% after block weld renewal
           </p>
-        </div>
+        </Panel>
 
-        <div className="flex items-center gap-3">
-          <ModelStatus latency="35ms" isFallback={false} />
-        </div>
-      </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <div className="lg:col-span-7 space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <RiskGauge
-              score={asset.risk_score}
-              level={asset.risk_level}
-              failureProbability={asset.failure_probability}
-              safetyThreshold={0.65}
-              title="Track Failure Probability"
-            />
-            <AssetImpactIndicator
-              currentHealth={asset.health_score}
-              postMaintenanceHealth={95}
-              availabilityGain="+41%"
-              failureProbabilityDrop="-82%"
-              speedRestoration="Removes 30 km/h temporary speed restriction"
-            />
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Failure Probability</Eyebrow>
+            <ShieldAlert className="size-4 text-urgent" strokeWidth={2} />
           </div>
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-urgent">
+              {(asset.failure_probability * 100).toFixed(0)}%
+            </span>
+            <Chip tone="urgent">Critical Threshold: 65%</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Safety margin exceeded by 19%
+          </p>
+        </Panel>
 
-          <FeatureImportanceChart
-            features={asset.shap_features}
-            title="Telemetry Degradation Drivers (SHAP)"
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Operational Restriction</Eyebrow>
+            <Flame className="size-4 text-urgent" strokeWidth={2} />
+          </div>
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-headline-lg text-urgent">30 km/h TSR</span>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            Temporary speed restriction on Down Main
+          </p>
+        </Panel>
+
+        <Panel className="p-3.5">
+          <div className="flex items-start justify-between gap-2">
+            <Eyebrow>Post-Block Restoration</Eyebrow>
+            <TrendingUp className="size-4 text-nominal" strokeWidth={2} />
+          </div>
+          <div className="mt-2.5 flex items-center gap-2.5">
+            <span className="text-display-lg text-nominal">130 km/h</span>
+            <Chip tone="nominal">Full Speed</Chip>
+          </div>
+          <p className="mt-2.5 border-t border-line pt-2.5 text-body-sm text-ink-muted">
+            TSR lifted immediately post-block release
+          </p>
+        </Panel>
+      </div>
+
+      {/* Operational Assessment and Task Connections */}
+      <div className="mt-4 grid gap-4 lg:grid-cols-2">
+        <Panel>
+          <PanelHeader
+            dense
+            title="Physical Degradation Assessment"
+            subtitle="Identified track anomalies and field observations."
           />
+          <div className="p-4 space-y-3">
+            <div className="rounded border border-line bg-canvas p-3">
+              <p className="text-body-md text-ink">
+                <strong>Field Observation: </strong>
+                {asset.explanation ||
+                  'Ultrasonic flaw detection flagged 4.8mm fatigue crack at welded joint Km 824.6. High axle loading (52.4 MGT) requires ultrasonic weld repair and tamping.'}
+              </p>
+            </div>
 
-          <RiskExplanation
-            explanation={asset.explanation}
-            confidence={0.96}
-            recommendations={asset.recommendations}
+            <Eyebrow className="pt-1">Recommended Action Protocol</Eyebrow>
+            <ul className="space-y-2">
+              {(asset.recommendations || [
+                'Deploy USFD testing unit for flaw boundary demarcation',
+                'Mobilize weld renewal gang for 3.5h joint possession window',
+                'Synchronize with TRD power isolation for overhead clearance',
+              ]).map((rec, idx) => (
+                <li
+                  key={idx}
+                  className="flex items-center gap-2 rounded border border-line bg-surface p-2.5 text-body-md text-ink"
+                >
+                  <CheckCircle2 className="size-4 text-nominal shrink-0" />
+                  <span>{rec}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Panel>
+
+        <Panel>
+          <PanelHeader
+            dense
+            title="Associated Pending Maintenance Tasks"
+            subtitle="Work orders linked to this physical corridor asset."
           />
-        </div>
-
-        <div className="lg:col-span-5 space-y-6">
-          <div className="bg-white border border-[#E5E1D8] rounded-xl p-5 shadow-sm">
-            <h3 className="text-sm font-semibold text-[#252525] mb-3">Associated Maintenance Tasks</h3>
-            <div className="space-y-2 text-xs font-mono">
-              <div className="p-3 bg-[#F9F8F5] border border-[#E5E1D8] rounded-lg flex items-center justify-between">
+          <div className="p-4 space-y-3">
+            <div className="rounded border border-line bg-canvas p-3">
+              <div className="flex items-center justify-between">
                 <div>
-                  <span className="font-bold text-[#252525] block">TSK-2024-001</span>
-                  <span className="text-[#767676]">Ultrasonic Rail Weld Repair</span>
+                  <Ref>TSK-2024-001</Ref>
+                  <p className="mt-1 font-semibold text-ink">Ultrasonic Rail Weld Repair</p>
+                  <p className="text-body-sm text-ink-muted">Civil Track (P-Way) · 210 min duration</p>
                 </div>
                 <Link
-                  to="/maintenance-intelligence/TSK-2024-001"
-                  className="px-3 py-1 bg-[#F2B759] text-[#252525] font-semibold rounded text-xs hover:opacity-90"
+                  to="/app/tasks/TSK-2024-001"
+                  className="rounded border border-line bg-surface px-3 py-1.5 text-label-sm uppercase font-semibold text-ink hover:bg-spine-hover transition-colors"
                 >
-                  View ML Inferences
+                  View Decision Support
                 </Link>
               </div>
             </div>
-          </div>
 
-          <ModelMetadata />
-        </div>
+            <div className="rounded border border-nominal-line bg-nominal-tint p-3">
+              <p className="text-label-sm uppercase font-semibold text-nominal">Corridor Benefit</p>
+              <p className="mt-1 text-body-md text-ink">
+                Executing this block window restores line speed to 130 km/h, preventing cumulative daily delays of 48 minutes across 14 passenger express trains.
+              </p>
+            </div>
+          </div>
+        </Panel>
       </div>
-    </div>
+
+      {/* Collapsible Technical AI Diagnostics */}
+      {showTechnicalDetails && (
+        <Panel className="mt-4 border-accent-line bg-surface p-4 animate-in fade-in-50">
+          <PanelHeader
+            dense
+            title="Telemetry Degradation Drivers (TreeSHAP Vector)"
+            subtitle="Machine learning feature weightings computed by AssetRiskPredictor v2.0."
+          />
+          <div className="p-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {(asset.shap_features || [
+              { feature: 'Ultrasonic Flaw Depth (4.8mm)', impact: 0.38, direction: 'increases_risk' },
+              { feature: 'Asset Service Life (14.2y)', impact: 0.24, direction: 'increases_risk' },
+              { feature: 'Corridor Axle Load (52.4 MGT)', impact: 0.19, direction: 'increases_risk' },
+              { feature: 'Peak Vibration Anomaly (2.4g)', impact: 0.12, direction: 'increases_risk' },
+              { feature: 'Recent Surface Tamping (45d)', impact: -0.15, direction: 'decreases_risk' },
+              { feature: 'Ballast Depth (310mm)', impact: -0.08, direction: 'decreases_risk' },
+            ]).map((feat, idx) => (
+              <div key={idx} className="rounded border border-line bg-canvas p-3">
+                <p className="text-body-sm text-ink font-semibold">{feat.feature}</p>
+                <div className="mt-1 flex items-center justify-between text-body-sm">
+                  <span className="text-ink-muted">Attribution:</span>
+                  <span
+                    className={
+                      feat.impact > 0
+                        ? 'text-urgent font-mono font-semibold'
+                        : 'text-nominal font-mono font-semibold'
+                    }
+                  >
+                    {feat.impact > 0 ? `+${feat.impact}` : feat.impact}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Panel>
+      )}
+    </PageBody>
   )
 }
+

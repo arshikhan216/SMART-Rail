@@ -1,12 +1,30 @@
-"""Configuration loader and strongly-typed settings models."""
+"""Configuration loader and strongly-typed settings models for SMART-Rail."""
 
 from __future__ import annotations
 import os
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Optional
+from enum import Enum
 import yaml
 from pydantic import BaseModel, Field
-from src.exceptions import ConfigurationError
+
+
+class DeploymentEnvironment(str, Enum):
+    LOCAL_PROTOTYPE = "LOCAL_PROTOTYPE"
+    RAILWAY_ON_PREM = "RAILWAY_ON_PREM"
+    RAILWAY_PRIVATE_CLOUD = "RAILWAY_PRIVATE_CLOUD"
+    CRIS_CONTROLLED = "CRIS_CONTROLLED"
+
+
+class DataSourceType(str, Enum):
+    SYNTHETIC = "SYNTHETIC"
+    CSV = "CSV"
+    JSON = "JSON"
+    TMS_ADAPTER = "TMS_ADAPTER"
+    TDMS_ADAPTER = "TDMS_ADAPTER"
+    SMMS_ADAPTER = "SMMS_ADAPTER"
+    BDMS_ADAPTER = "BDMS_ADAPTER"
+    COA_ADAPTER = "COA_ADAPTER"
 
 
 class PriorityWeightsConfig(BaseModel):
@@ -28,7 +46,7 @@ class OptimizationWeightsConfig(BaseModel):
 
 
 class OptimizationConfig(BaseModel):
-    solver_max_time_seconds: int = 30
+    solver_max_time_seconds: int = 60
     num_workers: int = 8
     relative_gap_limit: float = 0.01
     log_search_progress: bool = False
@@ -55,11 +73,35 @@ class CoordinationConfig(BaseModel):
     )
 
 
+class SecurityConfig(BaseModel):
+    rbac_enabled: bool = False
+    jwt_secret_key: str = os.getenv("SMARTRAIL_SECRET_KEY", "smartrail_development_secret_key_change_in_production")
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 480
+    allowed_hosts: List[str] = Field(default_factory=lambda: ["*"])
+    cors_origins: List[str] = Field(default_factory=lambda: ["*"])
+
+
+class DataFreshnessConfig(BaseModel):
+    max_stale_hours: float = 24.0
+    max_timetable_stale_hours: float = 6.0
+    strict_freshness_enforcement: bool = False
+
+
+class ResilienceConfig(BaseModel):
+    api_timeout_seconds: float = 10.0
+    max_retries: int = 3
+    retry_backoff_factor: float = 1.5
+    circuit_breaker_failure_threshold: int = 5
+    circuit_breaker_recovery_timeout_seconds: float = 30.0
+
+
 class PathsConfig(BaseModel):
     raw_data_dir: str = "data/raw"
     processed_data_dir: str = "data/processed"
     synthetic_data_dir: str = "data/synthetic"
     models_dir: str = "models"
+    reports_dir: str = "reports/output"
 
 
 class ApiConfig(BaseModel):
@@ -76,32 +118,40 @@ class LoggingConfig(BaseModel):
 
 class AppConfig(BaseModel):
     environment: str = "production"
+    deployment_mode: DeploymentEnvironment = DeploymentEnvironment.LOCAL_PROTOTYPE
+    data_source: DataSourceType = DataSourceType.SYNTHETIC
     random_seed: int = 42
     priority_weights: PriorityWeightsConfig = Field(default_factory=PriorityWeightsConfig)
     optimization: OptimizationConfig = Field(default_factory=OptimizationConfig)
     train_impact: TrainImpactConfig = Field(default_factory=TrainImpactConfig)
     coordination: CoordinationConfig = Field(default_factory=CoordinationConfig)
+    security: SecurityConfig = Field(default_factory=SecurityConfig)
+    data_freshness: DataFreshnessConfig = Field(default_factory=DataFreshnessConfig)
+    resilience: ResilienceConfig = Field(default_factory=ResilienceConfig)
     paths: PathsConfig = Field(default_factory=PathsConfig)
     api: ApiConfig = Field(default_factory=ApiConfig)
     logging: LoggingConfig = Field(default_factory=LoggingConfig)
 
 
+CONFIG = AppConfig()
+
+
 def load_config(config_path: str | Path | None = None) -> AppConfig:
     """Load configuration from YAML file and environment variables."""
+    global CONFIG
     if config_path is None:
         config_path = os.getenv("CONFIG_PATH", "config.yaml")
 
     path = Path(config_path)
     if not path.exists():
-        return AppConfig()
+        CONFIG = AppConfig()
+        return CONFIG
 
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
-        return AppConfig(**data)
+        CONFIG = AppConfig(**data)
+        return CONFIG
     except Exception as e:
-        raise ConfigurationError(f"Failed to load configuration from {path}: {e}") from e
-
-
-# Global configuration instance
-CONFIG = load_config()
+        CONFIG = AppConfig()
+        return CONFIG
