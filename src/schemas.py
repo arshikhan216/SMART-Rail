@@ -11,8 +11,24 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 # Enums
 # ==========================================
 
+class DataClassification(str, Enum):
+    SYNTHETIC = "SYNTHETIC"
+    PUBLIC = "PUBLIC"
+    PROTOTYPE = "PROTOTYPE"
+    ESTIMATED = "ESTIMATED"
+    RAILWAY_PRODUCTION = "RAILWAY_PRODUCTION"
+
+
+class UserRole(str, Enum):
+    ADMIN = "ADMIN"
+    PLANNER = "PLANNER"
+    MAINTENANCE_ENGINEER = "MAINTENANCE_ENGINEER"
+    OPERATIONS_USER = "OPERATIONS_USER"
+    VIEWER = "VIEWER"
+
+
 class Department(str, Enum):
-    ENGINEERING = "ENGINEERING"  # Track / TMS
+    ENGINEERING = "ENGINEERING"  # Track / TMS (P-Way)
     S_AND_T = "S_AND_T"          # Signal & Telecom / SMMS
     TRACTION = "TRACTION"        # Overhead Electrical / TDMS
 
@@ -78,6 +94,18 @@ class PriorityLevel(str, Enum):
     CRITICAL = "CRITICAL"
 
 
+class CandidateStatus(str, Enum):
+    RECOMMENDED = "RECOMMENDED"
+    ALTERNATIVE = "ALTERNATIVE"
+    REJECTED = "REJECTED"
+
+
+class ValidationVerdict(str, Enum):
+    VALID = "VALID"
+    REQUIRES_REVIEW = "REQUIRES_REVIEW"
+    BLOCKED = "BLOCKED"
+
+
 # ==========================================
 # Domain Entities
 # ==========================================
@@ -95,13 +123,14 @@ class Asset(BaseModel):
     condition_score: float = Field(..., ge=0.0, le=100.0, description="Measured condition (0=Failing, 100=Pristine)")
     traffic_load: float = Field(default=0.0, ge=0.0, description="Traffic load in Gross Million Tonnes (GMT) or daily train count")
     last_maintenance_date: Optional[dt.date] = Field(default=None, description="Date of last scheduled/corrective maintenance")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE, description="Source provenance classification")
 
     @field_validator("condition_score")
     @classmethod
-    def validate_condition_score(cls, v: float) -> float:
+    def validate_score_range(cls, v: float) -> float:
         if not (0.0 <= v <= 100.0):
-            raise ValueError("Condition score must be between 0.0 and 100.0")
-        return round(v, 2)
+            raise ValueError(f"condition_score must be between 0 and 100, got {v}")
+        return v
 
 
 class Defect(BaseModel):
@@ -114,6 +143,7 @@ class Defect(BaseModel):
     detected_date: dt.date = Field(..., description="Date defect was identified")
     status: DefectStatus = Field(default=DefectStatus.OPEN, description="Current lifecycle state")
     overdue_days: int = Field(default=0, ge=0, description="Days elapsed past the mandated repair deadline")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
 
 class MaintenanceTask(BaseModel):
@@ -132,6 +162,7 @@ class MaintenanceTask(BaseModel):
     priority_score: Optional[float] = Field(default=None, ge=0.0, le=100.0, description="Calculated 0-100 priority score")
     risk_score: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Predicted failure risk probability")
     is_safety_critical: bool = Field(default=False, description="Whether unexecuted task breaches safety standards")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
 
 class Train(BaseModel):
@@ -142,6 +173,7 @@ class Train(BaseModel):
     priority: int = Field(default=2, ge=1, le=5, description="Dispatch priority (1=Highest e.g. Rajdhani, 5=Lowest)")
     source: str = Field(..., description="Origin station / yard")
     destination: str = Field(..., description="Destination station / yard")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
 
 class TrainMovement(BaseModel):
@@ -152,6 +184,7 @@ class TrainMovement(BaseModel):
     arrival_time: dt.datetime = Field(..., description="Section entry timestamp")
     departure_time: dt.datetime = Field(..., description="Section exit timestamp")
     direction: TrainDirection = Field(default=TrainDirection.UP, description="Movement direction")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
     @model_validator(mode="after")
     def validate_times(self) -> TrainMovement:
@@ -168,6 +201,7 @@ class BlockWindow(BaseModel):
     start_time: dt.datetime = Field(..., description="Block start timestamp")
     end_time: dt.datetime = Field(..., description="Block end timestamp")
     available: bool = Field(default=True, description="Whether window is open for allocation")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
     @property
     def duration_hours(self) -> float:
@@ -190,6 +224,7 @@ class Resource(BaseModel):
     available_from: dt.datetime = Field(..., description="Availability start window")
     available_until: dt.datetime = Field(..., description="Availability end window")
     section_id: Optional[str] = Field(default=None, description="Base station or home section if localized")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
     @model_validator(mode="after")
     def validate_resource_window(self) -> Resource:
@@ -209,6 +244,7 @@ class MaintenanceHistory(BaseModel):
     duration_hours: float = Field(..., gt=0.0, description="Possession duration in hours")
     cost: Optional[float] = Field(default=None, ge=0.0, description="Direct maintenance expenditure")
     failure_occurred_after_days: Optional[int] = Field(default=None, ge=0, description="Days until next reported defect/failure")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
 
 class WeatherRecord(BaseModel):
@@ -220,6 +256,7 @@ class WeatherRecord(BaseModel):
     rainfall_mm: float = Field(default=0.0, ge=0.0, description="Daily rainfall in mm")
     humidity_pct: float = Field(default=50.0, ge=0.0, le=100.0, description="Relative humidity %")
     weather_condition: str = Field(default="NORMAL", description="Weather tag e.g. HEAVY_RAIN, EXTREME_HEAT, NORMAL")
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
 
 
 # ==========================================
@@ -236,6 +273,28 @@ class CandidateAssignment(BaseModel):
     train_impact: float = 0.0
     resource_feasible: bool = True
     duration_feasible: bool = True
+    status: CandidateStatus = Field(default=CandidateStatus.ALTERNATIVE)
+
+
+class BlockCandidateAlternative(BaseModel):
+    """Full ranked alternative candidate for human decision support."""
+    candidate_id: str
+    block_id: str
+    section_id: str
+    start_time: dt.datetime
+    end_time: dt.datetime
+    duration_hours: float
+    involved_departments: List[Department]
+    maintenance_tasks: List[str]
+    affected_trains_count: int = 0
+    train_impact_score: float = 0.0
+    coordination_benefit_hours: float = 0.0
+    asset_availability_impact: float = 0.0
+    estimated_cost: Optional[float] = None
+    status: CandidateStatus = Field(default=CandidateStatus.ALTERNATIVE)
+    rejection_reasons: List[str] = Field(default_factory=list)
+    overall_score: float = 0.0
+    score_breakdown: Dict[str, float] = Field(default_factory=dict)
 
 
 class ScheduleAssignment(BaseModel):
@@ -254,6 +313,28 @@ class ScheduleAssignment(BaseModel):
     explanation: str = ""
 
 
+class ValidationCheckResult(BaseModel):
+    """Outcome of an individual deterministic validation rule."""
+    check_name: str
+    passed: bool
+    verdict: ValidationVerdict
+    description: str
+    details: Optional[Dict[str, Any]] = None
+
+
+class DeterministicValidationReport(BaseModel):
+    """Complete deterministic validation outcome independent of ML."""
+    plan_id: str
+    overall_verdict: ValidationVerdict
+    checks_evaluated: int
+    checks_passed: int
+    checks_failed: int
+    validation_checks: List[ValidationCheckResult] = Field(default_factory=list)
+    requires_human_review: bool = True
+    authorized_by: Optional[str] = None
+    validated_at: dt.datetime = Field(default_factory=dt.datetime.now)
+
+
 class OptimizationResult(BaseModel):
     """Comprehensive output produced by CP-SAT solver and planning engine."""
     plan_id: str
@@ -270,3 +351,8 @@ class OptimizationResult(BaseModel):
     assignments: List[ScheduleAssignment] = Field(default_factory=list)
     unassigned_tasks: List[str] = Field(default_factory=list)
     warnings: List[str] = Field(default_factory=list)
+    alternatives: List[BlockCandidateAlternative] = Field(default_factory=list)
+    validation: Optional[DeterministicValidationReport] = None
+    data_classification: DataClassification = Field(default=DataClassification.PROTOTYPE)
+    data_timestamp: dt.datetime = Field(default_factory=dt.datetime.now)
+    model_version: str = "2.0.0"

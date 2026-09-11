@@ -1,7 +1,7 @@
 {
   "model_name": "RandomForestClassifier",
   "model_version": "1.0.0",
-  "training_date": "2026-09-08T21:04:28.996389",
+  "training_date": "2026-09-09T09:54:26.610345",
   "random_seed": 42,
   "disclaimer": "This model is a prototype trained/evaluated on synthetic or proxy data and must be retrained and validated using authorized operational railway data before real-world deployment.",
   "features": [

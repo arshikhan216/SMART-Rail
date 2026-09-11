@@ -1,7 +1,7 @@
 {
   "model_name": "LinearRegression",
   "model_version": "1.0.0",
-  "training_date": "2026-09-08T21:04:30.092004",
+  "training_date": "2026-09-09T09:54:27.407289",
   "random_seed": 42,
   "disclaimer": "This train delay model is an advisory proxy trained on synthetic/historical simulation data. It acts as a soft penalty in the optimizer and must never override deterministic railway safety constraints.",
   "features": [

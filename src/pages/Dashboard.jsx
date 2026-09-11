@@ -10,6 +10,7 @@ import {
   TrendingUp,
   TriangleAlert,
 } from 'lucide-react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import PageHeader, { PageBody } from '../components/shell/PageHeader'
 import { useHeader } from '../components/shell/AppShell'
@@ -17,6 +18,7 @@ import Button from '../components/ui/Button'
 import { AiTag, Chip, Dot, StatusChip } from '../components/ui/Chip'
 import { CorridorBar } from '../components/ui/Meter'
 import { Eyebrow, Panel, PanelHeader } from '../components/ui/Panel'
+import Loader from '../components/ui/Loader'
 import {
   blockOpportunities,
   corridors,
@@ -32,9 +34,18 @@ const KPI_ICONS = { TriangleAlert, CalendarClock, TrendingUp, Activity }
 
 export default function Dashboard() {
   useHeader(['Selected Division'])
+  const [showLoader, setShowLoader] = useState(true)
 
   return (
-    <PageBody>
+    <>
+      {showLoader && (
+        <Loader
+          durationMs={5000}
+          onComplete={() => setShowLoader(false)}
+          brandText="SMART RAIL"
+        />
+      )}
+      <PageBody>
       <PageHeader
         title="Dashboard"
         badge={
@@ -256,6 +267,7 @@ export default function Dashboard() {
         planning purposes only.
       </p>
     </PageBody>
+    </>
   )
 }
 

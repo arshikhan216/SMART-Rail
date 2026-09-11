@@ -52,6 +52,7 @@ export const navigation = [
     dot: 'nominal',
   },
   { to: '/app/analytics', label: 'Analytics', icon: 'ChartLine' },
+  { to: '/app/predictions', label: 'AI Intelligence', icon: 'BrainCircuit', badge: 'AI' },
 ]
 
 /* --- Maintenance register ------------------------------------------------ */

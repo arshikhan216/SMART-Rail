@@ -18,6 +18,11 @@ class DataValidationError(RailPlannerError):
     pass
 
 
+class DataIngestionError(RailPlannerError):
+    """Raised when an external data source fails during connection, extraction, or circuit breaking."""
+    pass
+
+
 class IncompatibleSchemaError(DataValidationError):
     """Raised when external dataset schema cannot be adapted to internal format."""
     pass
